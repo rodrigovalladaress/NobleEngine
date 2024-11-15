@@ -1,24 +1,24 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("SpotlightMask", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.SpotlightMask
 transition.name = "Spotlight Mask"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.MIX
 
 --- A circle wipe transition.
--- @see Noble.Transition.Spotlight.defaultProperties
--- @table Noble.Transition.SpotlightMask.defaultProperties
--- @tparam[opt=Ease.outQuad] Ease ease
--- @number[opt=200] x
--- @number[opt=120] y
--- @number[opt=nil] xStart
--- @number[opt=nil] yStart
--- @number[opt=nil] xEnd
--- @number[opt=nil] yEnd
--- @bool[opt=false] invert
+--- @see Noble.Transition.Spotlight.defaultProperties
+--- @table Noble.Transition.SpotlightMask.defaultProperties
+---@param ease? Ease ' Default: Ease.outQuad'
+---@param x? number ' Default: 200'
+---@param y? number ' Default: 120'
+---@param xStart? number ' Default: nil'
+---@param yStart? number ' Default: nil'
+---@param xEnd? number ' Default: nil'
+---@param yEnd? number ' Default: nil'
+---@param invert? boolean ' Default: false'
 transition.defaultProperties = {
 	ease = Ease.outQuad,
 	x = 200,
@@ -44,7 +44,7 @@ function transition:setProperties(__arguments)
 		self.ease = Ease.reverse(self.ease)
 	end
 
-	-- "Private" variables
+	--- "Private" variables
 	self._maskBackground = nil
 	self._maskForegroundDrawMode = nil
 	if (self.invert ~= true) then

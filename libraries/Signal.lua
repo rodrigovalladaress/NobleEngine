@@ -1,5 +1,5 @@
 --
--- Signal library by Dustin Mierau
+--- Signal library by Dustin Mierau
 --
 
 import "CoreLibs/object"

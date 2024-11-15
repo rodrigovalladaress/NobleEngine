@@ -1,10 +1,10 @@
 --- Engine-specific error handling.
--- Noble Engine overrides/supersedes some Playdate SDK behavior. A "bonk" is what happens when your game breaks the engine.
+--- Noble Engine overrides/supersedes some Playdate SDK behavior. A "bonk" is what happens when your game breaks the engine.
 --
--- Most bonks will throw during normal operation, but others ("debug bonks") introduce some execution overhead so are not
--- checked by default.
+--- Most bonks will throw during normal operation, but others ("debug bonks") introduce some execution overhead so are not
+--- checked by default.
 --
--- @module Noble.Bonk
+--- @module Noble.Bonk
 --
 Noble.Bonk = {}
 
@@ -14,7 +14,7 @@ local checkingForBonks = false
 
 local debugBonks = {}
 
--- You cannot run this directly. Run Noble.new() with __enableDebugBonkChecking as true to enable debug bonk checking.
+--- You cannot run this directly. Run Noble.new() with __enableDebugBonkChecking as true to enable debug bonk checking.
 function Noble.Bonk.enableDebugBonkChecking()
 	if (bonksAreSetup == false) then
 		if (Noble.engineInitialized() == false) then
@@ -34,8 +34,8 @@ end
 
 
 --- Begin checking for debug bonks, <strong>on every frame</strong>. This introduces needless overhead, so don't do it in a release build.
--- You can only run this if you ran previously `Noble.new()` with `__enableDebugBonkChecking` as true, which you should also not do in a release build.
-	-- @see Noble.new
+--- You can only run this if you ran previously `Noble.new()` with `__enableDebugBonkChecking` as true, which you should also not do in a release build.
+	--- @see Noble.new
 function Noble.Bonk.startCheckingDebugBonks()
 	if (checkingForBonks == false) then
 		if (bonksAreSetup) then
@@ -48,7 +48,7 @@ end
 
 --- Stop checking for debug bonks on every frame.
 --
--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
+--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
 function Noble.Bonk.stopCheckingDebugBonks()
 	if (checkingForBonks) then
 		if (bonksAreSetup) then
@@ -61,7 +61,7 @@ end
 
 --- Disable the ability to check for debug bonks. It frees up some memory. Once you disable debug bonk checking, you cannot re-enable it.
 --
--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
+--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
 function Noble.Bonk.disableDebugBonkChecking()
 	if (bonksAreSetup) then
 		debugBonks = {}
@@ -72,15 +72,15 @@ function Noble.Bonk.disableDebugBonkChecking()
 end
 
 --- Are we debug bonk checking for debug bonks?
--- @treturn bool
+---@return boolean 
 function Noble.Bonk.checkingDebugBonks()
 	return checkingForBonks
 end
 
 --- Manually check for debug bonks.
--- This method runs every frame when `checkingDebugBonks` is true, but you may call it manually instead.
+--- This method runs every frame when `checkingDebugBonks` is true, but you may call it manually instead.
 --
--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
+--- <strong>NOTE: You can only run this if debug bonk checking is enabled.</strong>
 function Noble.Bonk.checkDebugBonks()
 
 	if (playdate.crankDocked ~= debugBonks.crankDocked) then

@@ -1,26 +1,26 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("ImagetableMask", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.ImagetableMask
 transition.name = "Imagetable Mask"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.MIX
 
--- Overrides
+--- Overrides
 transition.ease = Ease.linear
 
 --- A wipe transition using an animated mask in the form of an imagetable.
--- @see Noble.Transition.Imagetable.defaultProperties
--- @table Noble.Transition.ImagetableMask.defaultProperties
--- @tparam Graphics.imagetable imagetable
--- @bool[opt=false] reverse Set `true` to play the imagetable's frames in reverse order.
--- @bool[opt=false] flipX
--- @bool[opt=false] flipY
--- @bool[opt=false] rotate Set as `true` to rotate the image 180-degrees
--- @bool[opt=true] hasTransparency Set as `true` if the imagetable asset has transparent pixels. Set as `false` if the image uses white pixels for transparency.
--- @bool[opt=false] invert Set as `true` to invert the image mask.
+--- @see Noble.Transition.Imagetable.defaultProperties
+--- @table Noble.Transition.ImagetableMask.defaultProperties
+---@param imagetable Graphics.imagetable 
+---@param reverse? boolean 'Set `true` to play the imagetable's frames in reverse order. Default: false'
+---@param flipX? boolean ' Default: false'
+---@param flipY? boolean ' Default: false'
+---@param rotate? boolean 'Set as `true` to rotate the image 180-degrees Default: false'
+---@param hasTransparency? boolean 'Set as `true` if the imagetable asset has transparent pixels. Set as `false` if the image uses white pixels for transparency. Default: true'
+---@param invert? boolean 'Set as `true` to invert the image mask. Default: false'
 transition.defaultProperties = {
 	imagetable = Graphics.imagetable.new("libraries/noble/assets/images/BoltTransitionEnter"),
 	reverse = false,
@@ -41,7 +41,7 @@ function transition:setProperties(__properties)
 	self.hasTransparency = __properties.hasTransparency or self.defaultProperties.hasTransparency
 	self.invert = __properties.invert or self.defaultProperties.invert
 
-	-- "Private" variables
+	--- "Private" variables
 	self._flipValue = Noble.Transition.Imagetable.getFlipValue(self.rotate, self.flipX, self.flipY)
 	self._imagetableLength = self.imagetable and #self.imagetable or 0
 	self._maskBackground = nil
@@ -54,7 +54,7 @@ function transition:setProperties(__properties)
 		self._maskForegroundDrawMode = Graphics.kDrawModeFillWhite
 	end
 
-	-- Warnings
+	--- Warnings
 	if (__properties.imagetableExit ~= nil) then
 		warn("BONK: You've specified an 'imagetableExit' for an Noble.Transition.ImagetableMask transition. This will have no effect. ")
 	end

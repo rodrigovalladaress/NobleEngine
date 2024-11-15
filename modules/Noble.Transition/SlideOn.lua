@@ -1,24 +1,24 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("SlideOn", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.SlideOn
 transition.name = "Slide On"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.MIX
 
--- Overrides
+--- Overrides
 transition._sequenceStartValue = 1
 transition._sequenceCompleteValue = 0
 transition._captureScreenshotsDuringTransition = true
 
 --- The next scene slides on the screen, covering up the previous scene.
--- @table Noble.Transition.SlideOn.defaultProperties
--- @tparam[opt=Ease.outInQuad] Ease ease
--- @number[opt=0] x
--- @number[opt=0] y
--- @number[opt=0] rotation
+--- @table Noble.Transition.SlideOn.defaultProperties
+---@param ease? Ease ' Default: Ease.outInQuad'
+---@param x? number ' Default: 0'
+---@param y? number ' Default: 0'
+---@param rotation? number ' Default: 0'
 transition.defaultProperties = {
 	ease = Ease.outQuart,
 	x = 0,

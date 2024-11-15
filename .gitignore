@@ -44,3 +44,6 @@ luac.out
 # LDoc config files
 config.ld
 .docs_templates/
+
+# ldoc-to-luacats-fixer
+*.lua-old

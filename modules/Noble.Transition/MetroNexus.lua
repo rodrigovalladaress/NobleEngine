@@ -1,24 +1,24 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("MetroNexus", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.MetroNexus
 transition.name = "Metro Nexus"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.COVER
 
--- Overrides
+--- Overrides
 transition._sequenceResumeValue = 0
 transition._sequenceCompleteValue = 1
 transition.easeEnter = Ease.linear
 transition.easeExit = Ease.linear
 
 --- A "cascade" wipe transition, taken from "Metro Nexus" by Noble Robot.
--- This transition has no properties.
--- @table Noble.Transition.MetroNexus.defaultProperties
+--- This transition has no properties.
+--- @table Noble.Transition.MetroNexus.defaultProperties
 
--- "Static" variables
+--- "Static" variables
 local panels
 
 function transition:setProperties(__arguments)
@@ -33,7 +33,7 @@ function transition:setProperties(__arguments)
 		}
 	end
 
-	-- Warnings
+	--- Warnings
 	if (__arguments.easeEnter or __arguments.easeEnter or __arguments.ease) then
 		warn("BONK: 'Noble.Transition.MetroNexus' does not support custom ease values.")
 	end

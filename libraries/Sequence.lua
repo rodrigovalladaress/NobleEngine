@@ -1,9 +1,9 @@
 --
--- Sequence library created by Nic Magnier
--- https://github.com/NicMagnier/PlaydateSequence
+--- Sequence library created by Nic Magnier
+--- https://github.com/NicMagnier/PlaydateSequence
 --
 
---[[
+---[[
 class to create simple animations using easing as building blocks
 
 To create a simple sequence:
@@ -21,7 +21,7 @@ import 'CoreLibs/easing'
 Sequence = {}
 Sequence.__index = Sequence
 
--- private member
+--- private member
 local _easings = playdate.easingFunctions
 if not _easings then
 	print("Sequence warning: easing function not found. Don't forget to call import 'CoreLibs/easing'")
@@ -31,14 +31,14 @@ end
 local _runningSequences = table.create(32,0)
 local _previousUpdateTime = playdate.getCurrentTimeMilliseconds()
 
--- This can be useful when you want your Sequence to continue in realtime
--- when using playdate.stop() / .wait(milliseconds) / .start().
+--- This can be useful when you want your Sequence to continue in realtime
+--- when using playdate.stop() / .wait(milliseconds) / .start().
 --
--- If you don't set __currentTime, it defaults to playdate.getCurrentTimeMilliseconds()
--- Examples:
--- Use Sequence.setPreviousUpdateTime() before you call playdate.start().
--- Use Sequence.setPreviousUpdateTime(playdate.getCurrentTimeMilliseconds() + milliseconds)
--- before using playdate.wait(milliseconds).
+--- If you don't set __currentTime, it defaults to playdate.getCurrentTimeMilliseconds()
+--- Examples:
+--- Use Sequence.setPreviousUpdateTime() before you call playdate.start().
+--- Use Sequence.setPreviousUpdateTime(playdate.getCurrentTimeMilliseconds() + milliseconds)
+--- before using playdate.wait(milliseconds).
 function Sequence.setPreviousUpdateTime(currentTime)
 	if (currentTime == nil) then
 		currentTime = playdate.getCurrentTimeMilliseconds()
@@ -47,18 +47,18 @@ function Sequence.setPreviousUpdateTime(currentTime)
 	_previousUpdateTime = currentTime
 end
 
--- create a new sequence
+--- create a new sequence
 
 function Sequence.new()
 	local new_sequence = {
-		-- runtime values
-		time = 0,  -- in ms
+		--- runtime values
+		time = 0,  --- in ms
 		cachedResultTimestamp = nil,
 		cachedResult = 0,
 		previousUpdateEasingIndex = nil,
 		isRunning = false,
 
-		duration = 0,  -- in ms
+		duration = 0,  --- in ms
 		loopType = false,
 		easings = table.create(4, 0),
 		easingCount = 0,
@@ -68,7 +68,7 @@ function Sequence.new()
 	return setmetatable(new_sequence, Sequence)
 end
 
--- put a low pacing to slow down all animations, great for tweaking
+--- put a low pacing to slow down all animations, great for tweaking
 function Sequence.update( pacing )
 	pacing = pacing or 1
 
@@ -119,19 +119,19 @@ function Sequence:clear()
 	self.callbacks = {}
 end
 
--- Reinitialize the sequence
+--- Reinitialize the sequence
 function Sequence:from( from )
 	from = from or 0
 
-	-- release all easings
+	--- release all easings
 	self:clear()
 
-	-- setup first empty easing at the beginning of the sequence
+	--- setup first empty easing at the beginning of the sequence
 	local newEasing = self:newEasing()
-	newEasing.timestamp = 0 -- in ms
-	newEasing.from = from -- in ms
-	newEasing.to = from -- in ms
-	newEasing.duration = 0 -- in ms
+	newEasing.timestamp = 0 --- in ms
+	newEasing.from = from --- in ms
+	newEasing.to = from --- in ms
+	newEasing.duration = 0 --- in ms
 	newEasing.fn = _easings.flat
 
 	return self
@@ -140,7 +140,7 @@ end
 function Sequence:to( to, duration, easingFunction, ... )
 	if not self then return end
 
-	-- default parameters
+	--- default parameters
 	to = to or 0
 	duration = toMilliseconds(duration) or 300
 	easingFunction = easingFunction or _easings.inOutQuad
@@ -151,7 +151,7 @@ function Sequence:to( to, duration, easingFunction, ... )
 	local lastEasing = self.easings[self.easingCount]
 	local newEasing = self:newEasing()
 
-	-- setup first empty easing at the beginning of the sequence
+	--- setup first empty easing at the beginning of the sequence
 	newEasing.timestamp = lastEasing.timestamp + lastEasing.duration
 	newEasing.from = lastEasing.to
 	newEasing.to = to
@@ -159,7 +159,7 @@ function Sequence:to( to, duration, easingFunction, ... )
 	newEasing.fn = easingFunction
 	newEasing.params = {...}
 
-	-- update overall sequence infos
+	--- update overall sequence infos
 	self.duration = self.duration + duration
 
 	return self
@@ -171,7 +171,7 @@ function Sequence:set( value )
 	local lastEasing = self.easings[self.easingCount]
 	local newEasing = self:newEasing()
 
-	-- setup first empty easing at the beginning of the sequence
+	--- setup first empty easing at the beginning of the sequence
 	newEasing.timestamp = lastEasing.timestamp + lastEasing.duration
 	newEasing.from = value
 	newEasing.to = value
@@ -181,8 +181,8 @@ function Sequence:set( value )
 	return self
 end
 
--- @repeatCount: number of times the last easing as to be duplicated
--- @mirror: bool, does the repeating easings have to be mirrored (yoyo effect)
+--- @repeatCount: number of times the last easing as to be duplicated
+--- @mirror: bool, does the repeating easings have to be mirrored (yoyo effect)
 function Sequence:again( repeatCount, mirror )
 	if not self then return end
 
@@ -193,7 +193,7 @@ function Sequence:again( repeatCount, mirror )
 	for i = 1, repeatCount do
 		local newEasing = self:newEasing()
 
-		-- setup first empty easing at the beginning of the sequence
+		--- setup first empty easing at the beginning of the sequence
 		newEasing.timestamp = previousEasing.timestamp + previousEasing.duration
 		newEasing.duration = previousEasing.duration
 		newEasing.fn = previousEasing.fn
@@ -207,7 +207,7 @@ function Sequence:again( repeatCount, mirror )
 			newEasing.to = previousEasing.to
 		end
 
-		-- update overall sequence infos
+		--- update overall sequence infos
 		self.duration = self.duration + newEasing.duration
 
 		previousEasing = newEasing
@@ -227,14 +227,14 @@ function Sequence:sleep( duration )
 	local lastEasing = self.easings[self.easingCount]
 	local new_easing = self:newEasing()
 
-	-- setup first empty easing at the beginning of the sequence
+	--- setup first empty easing at the beginning of the sequence
 	new_easing.timestamp = lastEasing.timestamp + lastEasing.duration
 	new_easing.from = lastEasing.to
 	new_easing.to = lastEasing.to
 	new_easing.duration = duration
 	new_easing.fn = _easings.flat
 
-	-- update overall sequence infos
+	--- update overall sequence infos
 	self.duration = self.duration + duration
 
 	return self
@@ -318,7 +318,7 @@ function Sequence:getEasingByTime( clampedTime )
 		elseif clampedTime > (easing.timestamp+easing.duration) then
 			easingIndex = easingIndex + 1
 		elseif clampedTime == (easing.timestamp+easing.duration) then
-			-- if the time is in between two easings, we prioritize the highest index (if it exists)
+			--- if the time is in between two easings, we prioritize the highest index (if it exists)
 			if self.easings[easingIndex + 1] then
 				easingIndex = easingIndex + 1
 			else
@@ -334,7 +334,7 @@ function Sequence:getEasingByTime( clampedTime )
 		end
 	end
 
-	-- we didn't the correct part
+	--- we didn't the correct part
 	print("Sequence warning: couldn't find sequence part. clampedTime probably out of bound.", clampedTime, self.duration)
 	return self.easings[1]
 end
@@ -348,12 +348,12 @@ function Sequence:get( time )
 
 	time = toMilliseconds(time) or self.time
 
-	-- try to get cached result
+	--- try to get cached result
 	if self.cachedResultTimestamp==time then
 		return self.cachedResult
 	end
 
-	-- we calculate and cache the result
+	--- we calculate and cache the result
 	local clampedTime = self:getClampedTime(time)
 	local easing = self:getEasingByTime(clampedTime)
 	local result
@@ -363,7 +363,7 @@ function Sequence:get( time )
 		result = easing.fn(clampedTime-easing.timestamp, easing.from, easing.to-easing.from, easing.duration, table.unpack(easing.params or {}))
 	end
 	
-	-- cache
+	--- cache
 	self.cachedResultTimestamp = clampedTime
 	self.cachedResult = result
 
@@ -406,7 +406,7 @@ function Sequence:triggerCallbacks( startTime, endTime )
 		end
 	end
 
-	-- most straightforward case: no loop
+	--- most straightforward case: no loop
 	if not self.loopType then
 		local startTimeClamped = self:getClampedTime( startTime )
 		triggerCallbacksClampedTimeRange(startTimeClamped, startTimeClamped+deltaTime)
@@ -414,9 +414,9 @@ function Sequence:triggerCallbacks( startTime, endTime )
 	end
 
 	--
-	-- now we handle loops
+	--- now we handle loops
 
-	-- probably rare case but we have to handle it
+	--- probably rare case but we have to handle it
 	if deltaTime>self.duration then
 		triggerCallbacksClampedTimeRange(0, self.duration)
 	end
@@ -442,18 +442,18 @@ function Sequence:triggerCallbacks( startTime, endTime )
 	end
 end
 
--- get the time clamped in the sequence duration
--- manage time using loop setting
+--- get the time clamped in the sequence duration
+--- manage time using loop setting
 function Sequence:getClampedTime( time )
 	time = time or self.time
 
 	local isForward = true
 
-	-- time is looped
+	--- time is looped
 	if self.loopType=="loop" then
 		return math.floor(time%self.duration), isForward
 
-	-- time is mirrored / yoyo
+	--- time is mirrored / yoyo
 	elseif self.loopType=="mirror" then
 		time = time%(self.duration*2)
 		if time>self.duration then
@@ -464,7 +464,7 @@ function Sequence:getClampedTime( time )
 		return math.floor(time), isForward
 	end
 
-	-- time is normally clamped
+	--- time is normally clamped
 	return math.clamp(time, 0, self.duration), isForward
 end
 
@@ -478,7 +478,7 @@ function Sequence:addRunning()
 end
 
 function Sequence:removeRunning()
-	-- _runningSequences table will be updated in the next sequence.update() 
+	--- _runningSequences table will be updated in the next sequence.update() 
 	self.isRunning = false
 end
 
@@ -528,7 +528,7 @@ function Sequence.getRunningSequencesDbg()
 	return result
 end
 
--- new easing function
+--- new easing function
 function _easings.flat(t, b, c, d)
 	return b
 end
@@ -540,7 +540,7 @@ math.clamp = math.clamp or function(a, min, max)
 	return math.max(min, math.min(max, a))
 end
 
--- convert a floating point second to a rounded int millisecond
+--- convert a floating point second to a rounded int millisecond
 function toMilliseconds(seconds)
 	if seconds==nil then return nil end
 	return math.floor(1000*seconds)

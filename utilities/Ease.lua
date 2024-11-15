@@ -1,6 +1,6 @@
 --- Extensions to `playdate.easingFunctions`, aliased as `Ease` in Noble Engine.
--- See the Playdate SDK for a list of easing functions.
--- @module Ease
+--- See the Playdate SDK for a list of easing functions.
+--- @module Ease
 
 local componentFunctions = {
 	[Ease.inOutQuad]	= {		enter = Ease.inQuad,		exit = Ease.outQuad		},
@@ -51,30 +51,39 @@ local reverseFunctions = {
 }
 
 --- Returns the first half of an "inOut" or "outIn" easing function.
--- Returns `nil` for any easing function that isn't in the form of `Ease.inOutXxxx` or `Ease.outInXxxx`. `Ease.linear` returns itself.
--- @usage
--- local ease = Ease.outInQuad
--- local easeEnter = Ease.enter(ease)	-- Returns "Ease.outQuad"
+--- Returns `nil` for any easing function that isn't in the form of `Ease.inOutXxxx` or `Ease.outInXxxx`. `Ease.linear` returns itself.
+--- Usage:
+---```
+--- local ease = Ease.outInQuad
+--- local easeEnter = Ease.enter(ease)	-- Returns "Ease.outQuad"
+
+---```
 function Ease.enter(__easingFunction)
 	if (componentFunctions[__easingFunction] == nil) then return nil end
 	return componentFunctions[__easingFunction].enter
 end
 
 --- Returns the second half of an "inOut" or "outIn" easing function.
--- Returns `nil` for any easing function that isn't in the form of `Ease.inOutXxxx` or `Ease.outInXxxx`. `Ease.linear` returns itself.
--- @usage
--- local ease = Ease.outInQuad
--- local easeExit = Ease.exit(ease)		-- Returns "Ease.inQuad"
+--- Returns `nil` for any easing function that isn't in the form of `Ease.inOutXxxx` or `Ease.outInXxxx`. `Ease.linear` returns itself.
+--- Usage:
+---```
+--- local ease = Ease.outInQuad
+--- local easeExit = Ease.exit(ease)		-- Returns "Ease.inQuad"
+
+---```
 function Ease.exit(__easingFunction)
 	if (componentFunctions[__easingFunction] == nil) then return nil end
 	return componentFunctions[__easingFunction].exit
 end
 
 --- Returns the reverse function of the provided function.
--- Returns `nil` for any easing function that isn't in the form of `Ease.inXxxx` or `Ease.outXxxx`. `Ease.linear` returns itself.
--- @usage
--- local ease = Ease.inQuad
--- local reverseEase = Ease.reverse(ease) -- Returns "Ease.outQuad"
+--- Returns `nil` for any easing function that isn't in the form of `Ease.inXxxx` or `Ease.outXxxx`. `Ease.linear` returns itself.
+--- Usage:
+---```
+--- local ease = Ease.inQuad
+--- local reverseEase = Ease.reverse(ease) -- Returns "Ease.outQuad"
+
+---```
 function Ease.reverse(__easingFunction)
 	if (reverseFunctions[__easingFunction] == nil) then return nil end
 	return reverseFunctions[__easingFunction]

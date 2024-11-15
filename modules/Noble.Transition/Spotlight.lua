@@ -1,36 +1,36 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("Spotlight", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.Spotlight
 transition.name = "Spotlight"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.COVER
 
 --- A spotlight in-out transition.
--- @see Noble.Transition.SpotlightMask.defaultProperties
--- @table Noble.Transition.Spotlight.defaultProperties
--- @number[opt=0.25] holdTime
--- @tparam Graphics.image panelImage
--- @tparam[opt=Graphics.image.kDitherTypeBayer4x4] Graphics.image.kDither dither
--- @tparam[opt=Ease.outInQuad] Ease ease
--- @number[opt=200] x
--- @number[opt=120] y
--- @tparam[opt=nil] Ease easeEnter
--- @number[opt=nil] xEnter
--- @number[opt=nil] yEnter
--- @number[opt=nil] xEnterStart
--- @number[opt=nil] yEnterStart
--- @number[opt=nil] xEnterEnd
--- @number[opt=nil] yEnterEnd
--- @tparam[opt=nil] Ease easeEnter
--- @number[opt=nil] xExit
--- @number[opt=nil] yExit
--- @number[opt=nil] xExitStart
--- @number[opt=nil] yExitStart
--- @number[opt=nil] xExitEnd
--- @number[opt=nil] yExitEnd
+--- @see Noble.Transition.SpotlightMask.defaultProperties
+--- @table Noble.Transition.Spotlight.defaultProperties
+---@param holdTime? number ' Default: 0.25'
+---@param panelImage Graphics.image 
+---@param dither? Graphics.image.kDither ' Default: Graphics.image.kDitherTypeBayer4x4'
+---@param ease? Ease ' Default: Ease.outInQuad'
+---@param x? number ' Default: 200'
+---@param y? number ' Default: 120'
+---@param easeEnter? Ease ' Default: nil'
+---@param xEnter? number ' Default: nil'
+---@param yEnter? number ' Default: nil'
+---@param xEnterStart? number ' Default: nil'
+---@param yEnterStart? number ' Default: nil'
+---@param xEnterEnd? number ' Default: nil'
+---@param yEnterEnd? number ' Default: nil'
+---@param easeEnter? Ease ' Default: nil'
+---@param xExit? number ' Default: nil'
+---@param yExit? number ' Default: nil'
+---@param xExitStart? number ' Default: nil'
+---@param yExitStart? number ' Default: nil'
+---@param xExitEnd? number ' Default: nil'
+---@param yExitEnd? number ' Default: nil'
 transition.defaultProperties = {
 	holdTime = 0.25,
 	panelImage = nil,
@@ -54,7 +54,7 @@ transition.defaultProperties = {
 	yExitEnd = nil
 }
 
--- "Static" variables
+--- "Static" variables
 local defaultPanelImage
 
 function transition:setProperties(__arguments)

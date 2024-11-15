@@ -1,19 +1,19 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("SlideOff", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.SlideOff
 transition.name = "Slide Off"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.MIX
 
 --- The previous scene slides off the screen, revealing the next scene.
--- @table Noble.Transition.SlideOff.defaultProperties
--- @tparam[opt=Ease.outInQuad] Ease ease
--- @number[opt=0] x
--- @number[opt=0] y
--- @number[opt=0] rotation
+--- @table Noble.Transition.SlideOff.defaultProperties
+---@param ease? Ease ' Default: Ease.outInQuad'
+---@param x? number ' Default: 0'
+---@param y? number ' Default: 0'
+---@param rotation? number ' Default: 0'
 transition.defaultProperties = {
 	ease = Ease.inQuart,
 	x = 0,

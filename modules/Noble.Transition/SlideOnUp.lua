@@ -1,14 +1,14 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("SlideOnUp", nil, Noble.Transition).extends(Noble.Transition.SlideOn)
 local transition = Noble.Transition.SlideOnUp
 transition.name = "Slide On (Up)"
 
 --- The next scene slides onto the screen from the bottom, covering up the previous scene.
--- NOTE: The `x`, `y`, and `rotation` properties are locked.
--- @see Noble.Transition.SlideOn.defaultProperties
--- @table Noble.Transition.SlideOnUp.defaultProperties
+--- NOTE: The `x`, `y`, and `rotation` properties are locked.
+--- @see Noble.Transition.SlideOn.defaultProperties
+--- @table Noble.Transition.SlideOnUp.defaultProperties
 
 function transition:setProperties(__arguments)
 	transition.super.setProperties(self, __arguments)

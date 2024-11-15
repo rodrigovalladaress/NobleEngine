@@ -1,5 +1,5 @@
 --- An abstract class from which transition types are extended.
--- @module Noble.Transition
+--- @module Noble.Transition
 
 Noble.Transition = {}
 class("Transition", nil, Noble).extends()
@@ -7,23 +7,23 @@ class("Transition", nil, Noble).extends()
 Noble.Transition.Type = {}
 
 --- A transition type where no time at all passes between scenes.
--- @see Noble.Transition.Cut
+--- @see Noble.Transition.Cut
 Noble.Transition.Type.CUT = "Cut"
 
 --- A transition type that has an "Enter" phase and an "Exit" phase. The new scene does not become active until the Enter phase is complete. A "holdTime" value determines how long to wait after the Enter phase completes before starting the Exit phase.
--- @see Noble.Transition.Dip
--- @see Noble.Transition.Imagetable
--- @see Noble.Transition.Spotlight
+--- @see Noble.Transition.Dip
+--- @see Noble.Transition.Imagetable
+--- @see Noble.Transition.Spotlight
 Noble.Transition.Type.COVER = "Cover"
 
 --- A transition type that takes a screenshot of the exiting scene and activates the new scene before beginning the transition, allowing for both scenes to appear to be visible during the transition.
--- @see Noble.Transition.CrossDissolve
--- @see Noble.Transition.SlideOff
--- @see Noble.Transition.ImagetableMask
+--- @see Noble.Transition.CrossDissolve
+--- @see Noble.Transition.SlideOff
+--- @see Noble.Transition.ImagetableMask
 Noble.Transition.Type.MIX = "Mix"
 
 --- A transition may have unique properties that can be set by the user when invoked. This table holds the default values for those properties.
--- @see setDefaultProperties
+--- @see setDefaultProperties
 Noble.Transition.defaultProperties = {}
 
 function Noble.Transition:init(__duration, __arguments)
@@ -50,10 +50,10 @@ function Noble.Transition:init(__duration, __arguments)
 
 	self.holdTime = self.holdTime or __arguments.holdTime or self.defaultProperties.holdTime or 0
 
-	-- If the transition duration is so short that it breaks the sequence, we pad
-	-- out the time so that it takes at least one frame on either side. This is a
-	-- failsafe mostly in place for runtime-calculated transition durations. No one
-	-- would ever set a transition duration that short on purpose... right?
+	--- If the transition duration is so short that it breaks the sequence, we pad
+	--- out the time so that it takes at least one frame on either side. This is a
+	--- failsafe mostly in place for runtime-calculated transition durations. No one
+	--- would ever set a transition duration that short on purpose... right?
 	local frameDuration = 1/playdate.getFPS()
 	if ((self.durationEnter - self.holdTime/2) < frameDuration) then
 		self.durationEnter = frameDuration + self.holdTime/2 + 0.001
@@ -100,18 +100,21 @@ function Noble.Transition:init(__duration, __arguments)
 end
 
 --- Use this to modify multiple default properties of a transition. Having default properties avoids having to set them every time a transition is called.
--- Properties added here are merged with the existing default properties table. Overwrites only happen when a new value is set.
--- @usage
--- Noble.Transition.setDefaultProperties(Noble.Transition.CrossDissolve, {
--- 	dither = Graphics.image.kDitherTypeDiagonalLine
--- 	ease = Ease.outQuint
--- })
--- Noble.Transition.setDefaultProperties(Noble.Transition.SpotlightMask, {
--- 	x = 325,
--- 	y = 95,
--- 	invert = true
--- })
--- @see defaultProperties
+--- Properties added here are merged with the existing default properties table. Overwrites only happen when a new value is set.
+--- Usage:
+---```
+--- Noble.Transition.setDefaultProperties(Noble.Transition.CrossDissolve, {
+--- 	dither = Graphics.image.kDitherTypeDiagonalLine
+--- 	ease = Ease.outQuint
+--- })
+--- Noble.Transition.setDefaultProperties(Noble.Transition.SpotlightMask, {
+--- 	x = 325,
+--- 	y = 95,
+--- 	invert = true
+--- })
+
+---```
+--- @see defaultProperties
 function Noble.Transition.setDefaultProperties(__transition, __properties)
 	table.merge(__transition.defaultProperties, __properties)
 end
@@ -120,13 +123,13 @@ function Noble.Transition:execute()
 
 	local onStart = function()
 		Noble.transitionStartHandler()
-		self:onStart()					-- If this transition has any custom code to run here, run it.
+		self:onStart()					--- If this transition has any custom code to run here, run it.
 	end
 
 	local onMidpoint = function()
 		Noble.transitionMidpointHandler()
 		self.midpointReached = true
-		self:onMidpoint()				-- If this transition has any custom code to run here, run it.
+		self:onMidpoint()				--- If this transition has any custom code to run here, run it.
 	end
 
 	local onHoldTimeElapsed = function()
@@ -135,7 +138,7 @@ function Noble.Transition:execute()
 	end
 
 	local onComplete = function()
-		self:onComplete()				-- If this transition has any custom code to run here, run it.
+		self:onComplete()				--- If this transition has any custom code to run here, run it.
 		Noble.transitionCompleteHandler()
 	end
 
@@ -181,7 +184,7 @@ function Noble.Transition:execute()
 end
 
 --- *Do not call this directly.* Implement this in a custom transition in order to set properties from user arguments given in `Noble.transition()`. See existing transitions for implementation examples.
--- @see Noble.transition
+--- @see Noble.transition
 function Noble.Transition:setProperties(__arguments) end
 
 --- *Do not call this directly.* Implement this in a custom transition in order to run custom code when the transition starts. Default transitions in Noble Engine do not use this.
@@ -200,7 +203,7 @@ function Noble.Transition:onComplete() end
 function Noble.Transition:draw() end
 
 
--- Noble Engine built-in transitions.
+--- Noble Engine built-in transitions.
 import 'libraries/noble/modules/Noble.Transition/Cut.lua'
 --
 import 'libraries/noble/modules/Noble.Transition/CrossDissolve.lua'

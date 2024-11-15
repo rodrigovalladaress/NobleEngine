@@ -1,36 +1,36 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("Imagetable", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.Imagetable
 transition.name = "Imagetable"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.COVER
 
--- Overrides
+--- Overrides
 transition.easeEnter = Ease.linear
 transition.easeExit = Ease.linear
 
 --- A dip-style transition using one or two imagetables.
--- @see Noble.Transition.ImagetableMask.defaultProperties
--- @table Noble.Transition.Imagetable.defaultProperties
--- @number[opt=0] holdTime
--- @tparam Graphics.imagetable imagetable
--- @bool[opt=false] reverse
--- @bool[opt=false] flipX
--- @bool[opt=false] flipY
--- @bool[opt=false] rotate
--- @tparam Graphics.imagetable imagetableEnter
--- @bool[opt=nil] reverseEnter
--- @bool[opt=nil] flipXEnter
--- @bool[opt=nil] flipYEnter
--- @bool[opt=nil] rotateEnter
--- @tparam Graphics.imagetable imagetableExit
--- @bool[opt=nil] reverseExit
--- @bool[opt=nil] flipXExit
--- @bool[opt=nil] flipYExit
--- @bool[opt=nil] rotateExit
+--- @see Noble.Transition.ImagetableMask.defaultProperties
+--- @table Noble.Transition.Imagetable.defaultProperties
+---@param holdTime? number ' Default: 0'
+---@param imagetable Graphics.imagetable 
+---@param reverse? boolean ' Default: false'
+---@param flipX? boolean ' Default: false'
+---@param flipY? boolean ' Default: false'
+---@param rotate? boolean ' Default: false'
+---@param imagetableEnter Graphics.imagetable 
+---@param reverseEnter? boolean ' Default: nil'
+---@param flipXEnter? boolean ' Default: nil'
+---@param flipYEnter? boolean ' Default: nil'
+---@param rotateEnter? boolean ' Default: nil'
+---@param imagetableExit Graphics.imagetable 
+---@param reverseExit? boolean ' Default: nil'
+---@param flipXExit? boolean ' Default: nil'
+---@param flipYExit? boolean ' Default: nil'
+---@param rotateExit? boolean ' Default: nil'
 transition.defaultProperties = {
 	holdTime = 0,
 	imagetable = nil,
@@ -71,7 +71,7 @@ function transition:setProperties(__properties)
 	self.rotateEnter = __properties.rotateEnter or self.defaultProperties.rotateEnter or self.rotate
 	self.rotateExit = __properties.rotateExit or self.defaultProperties.rotateExit or self.rotate
 
-	-- "Private" variables
+	--- "Private" variables
 	self._frameCountEnter = self.imagetableEnter and #self.imagetableEnter or 0
 	self._frameCountExit = self.imagetableExit and #self.imagetableExit or 0
 
@@ -95,7 +95,7 @@ function transition:setProperties(__properties)
 		self._sequenceCompleteValue = sequenceExit1
 	end
 
-	-- Warnings
+	--- Warnings
 	if ((__properties.ease or __properties.easeEnter or __properties.easeExit) ~= nil) then
 		warn("BONK: You've specified an ease value for an Noble.Transition.Imagetable transition. This will have no effect.")
 	end

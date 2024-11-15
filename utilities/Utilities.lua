@@ -1,8 +1,8 @@
 --
--- Utilities.lua
+--- Utilities.lua
 --
--- Useful helper functions and API extensions.
--- Place your own utilities in "utilities/Utilities.lua"
+--- Useful helper functions and API extensions.
+--- Place your own utilities in "utilities/Utilities.lua"
 --
 
 Utilities = {}
@@ -91,7 +91,7 @@ function Utilities.newUUID()
 end
 
 
--- New math methods
+--- New math methods
 --
 
 function math.clamp(__value, __min, __max)
@@ -153,7 +153,7 @@ function math.lerp(a, b, t)
 	return a + (b - a) * t
 end
 
--- New array/table methods
+--- New array/table methods
 --
 
 function table.merge(__table1, __table2)
@@ -181,7 +181,7 @@ end
 function table.filter(__table, __filter)
 	local out = {}
 	for _, value in pairs(__table) do
-	--if filterIter(v, k, table) then out[k] = v end
+	---if filterIter(v, k, table) then out[k] = v end
 		if (__filter(value)) then
 			__table.insert (out,value)
 		end

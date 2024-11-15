@@ -1,23 +1,23 @@
 ---
--- @submodule Noble.Transition
+--- @submodule Noble.Transition
 
 class("WidgetSatchel", nil, Noble.Transition).extends(Noble.Transition)
 local transition = Noble.Transition.WidgetSatchel
 transition.name = "Widget Satchel"
 
--- Type
+--- Type
 transition._type = Noble.Transition.Type.COVER
 
--- Overrides
+--- Overrides
 transition._sequenceCompleteValue = 2
 transition.easeEnter = Ease.outCubic
 transition.easeExit = Ease.inCubic
 
 --- An "accordion" transition, taken from "Widget Satchel" by Noble Robot.
--- This transition has no properties.
--- @table Noble.Transition.MetroNexus.defaultProperties
+--- This transition has no properties.
+--- @table Noble.Transition.MetroNexus.defaultProperties
 
--- "Static" variables
+--- "Static" variables
 local panels
 
 function transition:setProperties(__arguments)
@@ -48,7 +48,7 @@ function transition:setProperties(__arguments)
 		Graphics.unlockFocus()
 	end
 
-	-- Warnings
+	--- Warnings
 	if (__arguments.easeEnter or __arguments.easeEnter or __arguments.ease) then
 		warn("BONK: 'Noble.Transition.WidgetSatchel' does not support custom ease values.")
 	end
