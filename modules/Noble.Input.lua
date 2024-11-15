@@ -4,13 +4,14 @@
 --- <br><br><strong>NOTE:</strong> While the Playdate SDK allows you to stack as many inputHandlers as you want, Noble Engine assumes only one <em>active</em> inputHandler at a time. You may still manually call `playdate.inputHandlers.push()` and `playdate.inputHandlers.pop()` yourself, but Noble Engine will not know about it and it may cause unexpected behavior.
 --- <br><br>In addition, you may directly query button status using the SDK's methods for that, but it is not advised to use that as the primary way to manage input for Noble Engine projects, because much of Noble.Input's functionality will not apply.
 --- @module Noble.Input
+---
 --- Usage:
 ---```
 ---	local myInputHandler = {
----		AButtonDown = function() end,	-- Fires once when button is pressed down.
----		AButtonHold = function() end,	-- Fires each frame while a button is held (Noble Engine implementation).
----		AButtonHeld = function() end,	-- Fires once after button is held for 1 second (available for A and B).
----		AButtonUp = function() end,		-- Fires once when button is released.
+---		AButtonDown = function() end, -- Fires once when button is pressed down.
+---		AButtonHold = function() end, -- Fires each frame while a button is held (Noble Engine implementation).
+---		AButtonHeld = function() end, -- Fires once after button is held for 1 second (available for A and B).
+---		AButtonUp = function() end, -- Fires once when button is released.
 ---		BButtonDown = function() end,
 ---		BButtonHold = function() end,
 ---		BButtonHeld = function() end,
@@ -27,14 +28,11 @@
 ---		upButtonDown = function() end,
 ---		upButtonHold = function() end
 ---		upButtonUp = function() end,
---
----		cranked = function(change, acceleratedChange) end,	-- See Playdate SDK.
----		crankDocked = function() end,						-- Noble Engine implementation.
----		crankUndocked = function() end,						-- Noble Engine implementation.
---
----		orientationChanged = function() end					-- Noble Engine implementation.
+---		cranked = function(change, acceleratedChange) end, -- See Playdate SDK.
+---		crankDocked = function() end, -- Noble Engine implementation.
+---		crankUndocked = function() end, -- Noble Engine implementation.
+---		orientationChanged = function() end -- Noble Engine implementation.
 ---	}
-
 ---```
 --- @see NobleScene.inputHandler
 --
@@ -64,7 +62,7 @@ function Noble.Input.setHandler(__inputHandler)
 		currentHandler = nil
 	else
 		currentHandler = __inputHandler
-		playdate.inputHandlers.push(__inputHandler, true)	--- The Playdate SDK allows for multiple inputHandlers to mix and match methods. Noble Engine removes this functionality.
+		playdate.inputHandlers.push(__inputHandler, true) --- The Playdate SDK allows for multiple inputHandlers to mix and match methods. Noble Engine removes this functionality.
 	end
 end
 
@@ -149,10 +147,8 @@ local accelerometerValues = nil
 --- @see Noble.Input.ORIENTATION_LEFT
 --- @see Noble.Input.ORIENTATION_RIGHT
 function Noble.Input.getOrientation(__getStoredValues)
-
 	local getStoredValues = Utilities.handleOptionalBoolean(__getStoredValues, false)
 	if (not getStoredValues) then
-
 		local turnOffAfterUse = false
 		if (not playdate.accelerometerIsRunning()) then
 			playdate.startAccelerometer()
@@ -177,7 +173,7 @@ function Noble.Input.getOrientation(__getStoredValues)
 			newOrientation = Noble.Input.ORIENTATION_UP
 		end
 
-		accelerometerValues = {x, y, z}
+		accelerometerValues = { x, y, z }
 
 		if (newOrientation ~= orientation) then
 			if (currentHandler.orientationChanged ~= nil) then
@@ -188,20 +184,19 @@ function Noble.Input.getOrientation(__getStoredValues)
 	end
 
 	return orientation, accelerometerValues
-
 end
 
 --- Do not call this method directly, or modify it, thanks. :-)
 function Noble.Input.update()
-
 	if (currentHandler == nil) then return end
 
 	if (currentHandler.AButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonA)) then
-			if (AButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.AButtonHold(AButtonHoldBufferCount) end		--- Execute!
-			AButtonHoldBufferCount = AButtonHoldBufferCount + 1																		--- Wait another frame!
+			if (AButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.AButtonHold(AButtonHoldBufferCount) end --- Execute!
+			AButtonHoldBufferCount = AButtonHoldBufferCount +
+				1                                                                                                    --- Wait another frame!
 		end
-		if (playdate.buttonJustReleased(playdate.kButtonA)) then AButtonHoldBufferCount = 0 end										--- Reset!
+		if (playdate.buttonJustReleased(playdate.kButtonA)) then AButtonHoldBufferCount = 0 end                      --- Reset!
 	end
 	if (currentHandler.BButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonB)) then
@@ -212,28 +207,40 @@ function Noble.Input.update()
 	end
 	if (currentHandler.upButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonUp)) then
-			if (upButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.upButtonHold(upButtonHoldBufferCount) end
+			if (upButtonHoldBufferCount >= buttonHoldBufferAmount) then
+				currentHandler.upButtonHold(
+					upButtonHoldBufferCount)
+			end
 			upButtonHoldBufferCount = upButtonHoldBufferCount + 1
 		end
 		if (playdate.buttonJustReleased(playdate.kButtonUp)) then upButtonHoldBufferCount = 0 end
 	end
 	if (currentHandler.downButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonDown)) then
-			if (downButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.downButtonHold(downButtonHoldBufferCount) end
+			if (downButtonHoldBufferCount >= buttonHoldBufferAmount) then
+				currentHandler.downButtonHold(
+					downButtonHoldBufferCount)
+			end
 			downButtonHoldBufferCount = downButtonHoldBufferCount + 1
 		end
 		if (playdate.buttonJustReleased(playdate.kButtonDown)) then downButtonHoldBufferCount = 0 end
 	end
 	if (currentHandler.leftButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonLeft)) then
-			if (leftButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.leftButtonHold(leftButtonHoldBufferCount) end
+			if (leftButtonHoldBufferCount >= buttonHoldBufferAmount) then
+				currentHandler.leftButtonHold(
+					leftButtonHoldBufferCount)
+			end
 			leftButtonHoldBufferCount = leftButtonHoldBufferCount + 1
 		end
 		if (playdate.buttonJustReleased(playdate.kButtonLeft)) then leftButtonHoldBufferCount = 0 end
 	end
 	if (currentHandler.rightButtonHold ~= nil) then
 		if (playdate.buttonIsPressed(playdate.kButtonRight)) then
-			if (rightButtonHoldBufferCount >= buttonHoldBufferAmount) then currentHandler.rightButtonHold(rightButtonHoldBufferCount) end
+			if (rightButtonHoldBufferCount >= buttonHoldBufferAmount) then
+				currentHandler.rightButtonHold(
+					rightButtonHoldBufferCount)
+			end
 			rightButtonHoldBufferCount = rightButtonHoldBufferCount + 1
 		end
 		if (playdate.buttonJustReleased(playdate.kButtonRight)) then rightButtonHoldBufferCount = 0 end
@@ -258,9 +265,11 @@ function playdate.crankUndocked()
 end
 
 --- Constants
---- . A set of constants referencing device inputs, stored as strings. Can be used for querying button input,
+--- A set of constants referencing device inputs, stored as strings. Can be used for querying button input,
 --- but are mainly for on-screen prompts or other elements where a string literal is useful, such as a filename, GameData value, or localization key.
+---
 --- For faster performance, use the ones that exist in the Playdate SDK (i.e.: `playdate.kButtonA`), which are stored as binary numbers.
+---
 --- Usage:
 ---```
 ---	function newPrompt(__input, __promptString)
@@ -272,9 +281,7 @@ end
 ---	promptMove = newPrompt(Noble.Input.DPAD_HORIZONTAL, "Move!")				-- assets/images/UI/Icon_dPadHorizontal.png"
 ---	promptJump = newPrompt(Noble.Input.BUTTON_A, "Jump!") 						-- assets/images/UI/Icon_buttonA.png"
 ---	promptCharge = newPrompt(Noble.Input.CRANK_FORWARD, "Charge the battery!")	-- assets/images/UI/Icon_crankForward.png"
-
 ---```
---- @section constants
 
 --- `"buttonA"`
 Noble.Input.BUTTON_A = "buttonA"

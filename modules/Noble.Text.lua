@@ -10,7 +10,6 @@ Noble.Text = {}
 ---```
 ---	Noble.Text.FONT_SMALL = Graphics.font.new("assets/fonts/MySmallFont")
 ---	Noble.Text.setFont(Noble.Text.FONT_SMALL)
-
 ---```
 
 --- The Playdate system font.
@@ -55,8 +54,8 @@ end
 
 --- Abstracts multiple `playdate.text` drawing functions into one.
 ---@param __string string 'Display text or localization key.'
----@param __x number 
----@param __y number 
+---@param __x number
+---@param __y number
 ---@param __alignment? any 'Left, right, or center! Default: Noble.Text.ALIGN_LEFT'
 ---@param __localized? boolean 'If true, `__string` is a localization key rather than display text. Default: false'
 ---@param __font? any 'A font to use. If not set, the `currentFont` is used. If set, the `currentFont` is not updated. Default: Noble.Text.getCurrentFont()'
@@ -73,5 +72,5 @@ function Noble.Text.draw(__string, __x, __y, __alignment, __localized, __font)
 		Graphics.drawTextAligned(string, __x, __y, alignment)
 	end
 
-	if (__font ~= nil) then Graphics.setFont(currentFont) end	--- Reset
+	if (__font ~= nil) then Graphics.setFont(currentFont) end --- Reset
 end

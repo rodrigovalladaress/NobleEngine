@@ -4,13 +4,13 @@
 --- See <a href="../examples/SceneTemplate.lua.html">templates/SceneTemplate.lua</a> for a blank scene that you can copy and modify for your own scenes.
 --- If you are using <a href="http://github.com/NobleRobot/NobleEngine-ProjectTemplate">NobleEngine-ProjectTemplate</a>,
 --- see `scenes/ExampleScene.lua` for an implementation example.
+---
 --- Usage:
 ---```
 ---	YourSceneName = {}
 ---	class("YourSceneName").extends(NobleScene)
 ---	local scene = YourSceneName
 --
-
 ---```
 --- @classmod NobleScene
 --
@@ -55,7 +55,6 @@ NobleScene.backgroundColor = Graphics.kColorWhite
 ---	-- OR...
 ---	-- Reuse another scene's inputHandler.
 ---	YourSceneName.inputHandler = SomeOtherSceneName.inputHandler
-
 ---```
 NobleScene.inputHandler = {}
 
@@ -120,7 +119,6 @@ end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:init(__sceneProperties)
 	self.name = self.className
@@ -136,7 +134,6 @@ end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:enter() end
 
@@ -149,7 +146,6 @@ function NobleScene:enter() end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:start()
 	Noble.Input.setHandler(self.inputHandler)
@@ -165,7 +161,6 @@ end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:update() end
 
@@ -181,7 +176,6 @@ function NobleScene:update() end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:drawBackground(__x, __y, __width, __height)
 	__x = __x or 0
@@ -189,7 +183,7 @@ function NobleScene:drawBackground(__x, __y, __width, __height)
 	__width = __width or Display.getWidth()
 	__height = __height or Display.getHeight()
 
-	 --- Cache the currently set color/pattern.
+	--- Cache the currently set color/pattern.
 	local color <const> = Graphics.getColor()
 	local color_type <const> = type(color)
 
@@ -215,7 +209,6 @@ end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:exit()
 	for _, sprite in ipairs(self.sprites) do
@@ -234,7 +227,6 @@ end
 ---		--[Your code here]--
 ---	end
 --
-
 ---```
 function NobleScene:finish()
 	for _, sprite in ipairs(self.sprites) do
@@ -259,7 +251,6 @@ end
 ---		YourSceneName.super.pause(self)
 ---		--[Your code here]--
 ---	end
-
 ---```
 function NobleScene:pause() end
 
@@ -270,6 +261,5 @@ function NobleScene:pause() end
 ---		YourSceneName.super.resume(self)
 ---		--[Your code here]--
 ---	end
-
 ---```
 function NobleScene:resume() end

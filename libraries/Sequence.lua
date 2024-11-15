@@ -4,18 +4,18 @@
 --
 
 ---[[
-class to create simple animations using easing as building blocks
+-- class to create simple animations using easing as building blocks
 
-To create a simple sequence:
-	animation = Sequence.new():from(0):to(1,2.0,"outQuad"):mirror()
+-- To create a simple sequence:
+-- 	animation = Sequence.new():from(0):to(1,2.0,"outQuad"):mirror()
 
-In your game loop
-	Sequence.update()
-	currentValue = animation:get()
+-- In your game loop
+-- 	Sequence.update()
+-- 	currentValue = animation:get()
 
-Add hooks or callback
-	animation = Sequence.new():from(0):to(1,2.0,"outQuad"):callback(function() print("end animation") end):mirror()
-]]--
+-- Add hooks or callback
+-- 	animation = Sequence.new():from(0):to(1,2.0,"outQuad"):callback(function() print("end animation") end):mirror()
+-- ]]--
 import 'CoreLibs/easing'
 
 Sequence = {}
@@ -28,7 +28,7 @@ if not _easings then
 	return
 end
 
-local _runningSequences = table.create(32,0)
+local _runningSequences = table.create(32, 0)
 local _previousUpdateTime = playdate.getCurrentTimeMilliseconds()
 
 --- This can be useful when you want your Sequence to continue in realtime
@@ -52,13 +52,13 @@ end
 function Sequence.new()
 	local new_sequence = {
 		--- runtime values
-		time = 0,  --- in ms
+		time = 0, --- in ms
 		cachedResultTimestamp = nil,
 		cachedResult = 0,
 		previousUpdateEasingIndex = nil,
 		isRunning = false,
 
-		duration = 0,  --- in ms
+		duration = 0, --- in ms
 		loopType = false,
 		easings = table.create(4, 0),
 		easingCount = 0,
@@ -69,11 +69,11 @@ function Sequence.new()
 end
 
 --- put a low pacing to slow down all animations, great for tweaking
-function Sequence.update( pacing )
+function Sequence.update(pacing)
 	pacing = pacing or 1
 
 	local currentTime = playdate.getCurrentTimeMilliseconds()
-	local deltaTime = math.floor((currentTime-_previousUpdateTime) * pacing)
+	local deltaTime = math.floor((currentTime - _previousUpdateTime) * pacing)
 	_previousUpdateTime = currentTime
 
 	for index = #_runningSequences, 1, -1 do
@@ -84,8 +84,8 @@ function Sequence.update( pacing )
 
 			seq.time = seq.time + deltaTime
 			seq.cachedResultTimestamp = nil
-			
-			seq:triggerCallbacks( previousTime, seq.time )
+
+			seq:triggerCallbacks(previousTime, seq.time)
 
 			if seq:isDone() then
 				seq.isRunning = false
@@ -120,7 +120,7 @@ function Sequence:clear()
 end
 
 --- Reinitialize the sequence
-function Sequence:from( from )
+function Sequence:from(from)
 	from = from or 0
 
 	--- release all easings
@@ -130,21 +130,21 @@ function Sequence:from( from )
 	local newEasing = self:newEasing()
 	newEasing.timestamp = 0 --- in ms
 	newEasing.from = from --- in ms
-	newEasing.to = from --- in ms
+	newEasing.to = from  --- in ms
 	newEasing.duration = 0 --- in ms
 	newEasing.fn = _easings.flat
 
 	return self
 end
 
-function Sequence:to( to, duration, easingFunction, ... )
+function Sequence:to(to, duration, easingFunction, ...)
 	if not self then return end
 
 	--- default parameters
 	to = to or 0
 	duration = toMilliseconds(duration) or 300
 	easingFunction = easingFunction or _easings.inOutQuad
-	if type(easingFunction)=="string" then
+	if type(easingFunction) == "string" then
 		easingFunction = _easings[easingFunction] or _easings.inOutQuad
 	end
 
@@ -157,7 +157,7 @@ function Sequence:to( to, duration, easingFunction, ... )
 	newEasing.to = to
 	newEasing.duration = duration
 	newEasing.fn = easingFunction
-	newEasing.params = {...}
+	newEasing.params = { ... }
 
 	--- update overall sequence infos
 	self.duration = self.duration + duration
@@ -165,7 +165,7 @@ function Sequence:to( to, duration, easingFunction, ... )
 	return self
 end
 
-function Sequence:set( value )
+function Sequence:set(value)
 	if not self then return end
 
 	local lastEasing = self.easings[self.easingCount]
@@ -183,7 +183,7 @@ end
 
 --- @repeatCount: number of times the last easing as to be duplicated
 --- @mirror: bool, does the repeating easings have to be mirrored (yoyo effect)
-function Sequence:again( repeatCount, mirror )
+function Sequence:again(repeatCount, mirror)
 	if not self then return end
 
 	repeatCount = repeatCount or 1
@@ -216,11 +216,11 @@ function Sequence:again( repeatCount, mirror )
 	return self
 end
 
-function Sequence:sleep( duration )
+function Sequence:sleep(duration)
 	if not self then return end
 
 	duration = toMilliseconds(duration) or 500
-	if duration==0 then
+	if duration == 0 then
 		return self
 	end
 
@@ -240,7 +240,7 @@ function Sequence:sleep( duration )
 	return self
 end
 
-function Sequence:callback( fn, timeOffset )
+function Sequence:callback(fn, timeOffset)
 	if not self then return end
 
 	timeOffset = toMilliseconds(timeOffset) or 0
@@ -274,14 +274,13 @@ function Sequence:newCallback()
 		fn = nil,
 		timestamp = nil,
 	}
-	table.insert( self.callbacks, newCallback)
+	table.insert(self.callbacks, newCallback)
 	return newCallback
 end
 
-function Sequence:getEasingByIndex( index )
-
+function Sequence:getEasingByIndex(index)
 	local easing = self.easings[index]
-	if type(easing)=="table" then
+	if type(easing) == "table" then
 		easing.params = nil
 		easing.callback = nil
 		return easing
@@ -301,7 +300,7 @@ function Sequence:getEasingByIndex( index )
 	return new_easing
 end
 
-function Sequence:getEasingByTime( clampedTime )
+function Sequence:getEasingByTime(clampedTime)
 	if self:isEmpty() then
 		print("Sequence warning: empty animation")
 		return nil
@@ -310,14 +309,14 @@ function Sequence:getEasingByTime( clampedTime )
 	local easingIndex = self.previousUpdateEasingIndex or 1
 	local foundEasing = false
 
-	while easingIndex>=1 and easingIndex<=self.easingCount do
+	while easingIndex >= 1 and easingIndex <= self.easingCount do
 		local easing = self.easings[easingIndex]
 
 		if clampedTime < easing.timestamp then
 			easingIndex = easingIndex - 1
-		elseif clampedTime > (easing.timestamp+easing.duration) then
+		elseif clampedTime > (easing.timestamp + easing.duration) then
 			easingIndex = easingIndex + 1
-		elseif clampedTime == (easing.timestamp+easing.duration) then
+		elseif clampedTime == (easing.timestamp + easing.duration) then
 			--- if the time is in between two easings, we prioritize the highest index (if it exists)
 			if self.easings[easingIndex + 1] then
 				easingIndex = easingIndex + 1
@@ -335,11 +334,12 @@ function Sequence:getEasingByTime( clampedTime )
 	end
 
 	--- we didn't the correct part
-	print("Sequence warning: couldn't find sequence part. clampedTime probably out of bound.", clampedTime, self.duration)
+	print("Sequence warning: couldn't find sequence part. clampedTime probably out of bound.", clampedTime, self
+	.duration)
 	return self.easings[1]
 end
 
-function Sequence:get( time )
+function Sequence:get(time)
 	if not self then return nil end
 
 	if self:isEmpty() then
@@ -349,7 +349,7 @@ function Sequence:get( time )
 	time = toMilliseconds(time) or self.time
 
 	--- try to get cached result
-	if self.cachedResultTimestamp==time then
+	if self.cachedResultTimestamp == time then
 		return self.cachedResult
 	end
 
@@ -360,9 +360,10 @@ function Sequence:get( time )
 	if easing.duration == 0 then
 		result = easing.to
 	else
-		result = easing.fn(clampedTime-easing.timestamp, easing.from, easing.to-easing.from, easing.duration, table.unpack(easing.params or {}))
+		result = easing.fn(clampedTime - easing.timestamp, easing.from, easing.to - easing.from, easing.duration,
+			table.unpack(easing.params or {}))
 	end
-	
+
 	--- cache
 	self.cachedResultTimestamp = clampedTime
 	self.cachedResult = result
@@ -370,19 +371,19 @@ function Sequence:get( time )
 	return result
 end
 
-function Sequence:triggerCallbacks( startTime, endTime )
-	if #self.callbacks==0 then
+function Sequence:triggerCallbacks(startTime, endTime)
+	if #self.callbacks == 0 then
 		return
 	end
-	if endTime<=startTime then
+	if endTime <= startTime then
 		return
 	end
 
 	local deltaTime = endTime - startTime
-	
-	local triggerCallbacksClampedTimeRange = function( clampedStart, clampedEnd)
+
+	local triggerCallbacksClampedTimeRange = function(clampedStart, clampedEnd)
 		local isForward = true
-		if clampedStart>clampedEnd then
+		if clampedStart > clampedEnd then
 			clampedStart, clampedEnd = clampedEnd, clampedStart
 			isForward = false
 		end
@@ -390,17 +391,17 @@ function Sequence:triggerCallbacks( startTime, endTime )
 		for index, cbObject in pairs(self.callbacks) do
 			local doTrigger = false
 
-			if cbObject.timestamp>clampedStart and cbObject.timestamp<clampedEnd then
+			if cbObject.timestamp > clampedStart and cbObject.timestamp < clampedEnd then
 				doTrigger = true
-			elseif isForward and cbObject.timestamp==clampedEnd then
+			elseif isForward and cbObject.timestamp == clampedEnd then
 				doTrigger = true
-			elseif isForward==false and cbObject.timestamp==clampedStart then
+			elseif isForward == false and cbObject.timestamp == clampedStart then
 				doTrigger = true
-			elseif clampedStart==0 and cbObject.timestamp==0 and isForward then
+			elseif clampedStart == 0 and cbObject.timestamp == 0 and isForward then
 				doTrigger = true
 			end
 
-			if doTrigger and type(cbObject.fn)=="function" then
+			if doTrigger and type(cbObject.fn) == "function" then
 				cbObject.fn()
 			end
 		end
@@ -408,8 +409,8 @@ function Sequence:triggerCallbacks( startTime, endTime )
 
 	--- most straightforward case: no loop
 	if not self.loopType then
-		local startTimeClamped = self:getClampedTime( startTime )
-		triggerCallbacksClampedTimeRange(startTimeClamped, startTimeClamped+deltaTime)
+		local startTimeClamped = self:getClampedTime(startTime)
+		triggerCallbacksClampedTimeRange(startTimeClamped, startTimeClamped + deltaTime)
 		return
 	end
 
@@ -417,25 +418,25 @@ function Sequence:triggerCallbacks( startTime, endTime )
 	--- now we handle loops
 
 	--- probably rare case but we have to handle it
-	if deltaTime>self.duration then
+	if deltaTime > self.duration then
 		triggerCallbacksClampedTimeRange(0, self.duration)
 	end
 
-	local startTimeClamped, isForward = self:getClampedTime( startTime )
+	local startTimeClamped, isForward = self:getClampedTime(startTime)
 	if isForward then
 		endTime = startTimeClamped + deltaTime
 	else
 		endTime = startTimeClamped - deltaTime
 	end
 
-	if endTime<0 then
-		triggerCallbacksClampedTimeRange(0, math.max(startTimeClamped, self:getClampedTime( endTime )))
-	elseif endTime>self.duration then
-		if self.loopType=="loop" then
+	if endTime < 0 then
+		triggerCallbacksClampedTimeRange(0, math.max(startTimeClamped, self:getClampedTime(endTime)))
+	elseif endTime > self.duration then
+		if self.loopType == "loop" then
 			triggerCallbacksClampedTimeRange(startTimeClamped, self.duration)
-			triggerCallbacksClampedTimeRange(0, self:getClampedTime( endTime ))
+			triggerCallbacksClampedTimeRange(0, self:getClampedTime(endTime))
 		else
-			triggerCallbacksClampedTimeRange(math.min(startTimeClamped, self:getClampedTime( endTime )), self.duration)
+			triggerCallbacksClampedTimeRange(math.min(startTimeClamped, self:getClampedTime(endTime)), self.duration)
 		end
 	else
 		triggerCallbacksClampedTimeRange(startTimeClamped, endTime)
@@ -444,19 +445,19 @@ end
 
 --- get the time clamped in the sequence duration
 --- manage time using loop setting
-function Sequence:getClampedTime( time )
+function Sequence:getClampedTime(time)
 	time = time or self.time
 
 	local isForward = true
 
 	--- time is looped
-	if self.loopType=="loop" then
-		return math.floor(time%self.duration), isForward
+	if self.loopType == "loop" then
+		return math.floor(time % self.duration), isForward
 
-	--- time is mirrored / yoyo
-	elseif self.loopType=="mirror" then
-		time = time%(self.duration*2)
-		if time>self.duration then
+		--- time is mirrored / yoyo
+	elseif self.loopType == "mirror" then
+		time = time % (self.duration * 2)
+		if time > self.duration then
 			isForward = false
 			time = self.duration + self.duration - time
 		end
@@ -478,7 +479,7 @@ function Sequence:addRunning()
 end
 
 function Sequence:removeRunning()
-	--- _runningSequences table will be updated in the next sequence.update() 
+	--- _runningSequences table will be updated in the next sequence.update()
 	self.isRunning = false
 end
 
@@ -509,11 +510,11 @@ function Sequence:restart()
 end
 
 function Sequence:isDone()
-    return self.time>=self.duration and (not self.loopType)
+	return self.time >= self.duration and (not self.loopType)
 end
 
 function Sequence:isEmpty()
-    return self.easingCount==0
+	return self.easingCount == 0
 end
 
 function Sequence.getRunningSequencesDbg()
@@ -521,7 +522,7 @@ function Sequence.getRunningSequencesDbg()
 
 	for index, seq in pairs(_runningSequences) do
 		if seq.isRunning then
-			table.insert( result, seq)
+			table.insert(result, seq)
 		end
 	end
 
@@ -542,6 +543,6 @@ end
 
 --- convert a floating point second to a rounded int millisecond
 function toMilliseconds(seconds)
-	if seconds==nil then return nil end
-	return math.floor(1000*seconds)
+	if seconds == nil then return nil end
+	return math.floor(1000 * seconds)
 end

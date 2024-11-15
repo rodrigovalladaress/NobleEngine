@@ -15,7 +15,7 @@ transition.ease = Ease.linear
 --- @see Noble.Transition.Imagetable.defaultProperties
 --- @table Noble.Transition.ImagetableMask.defaultProperties
 ---@param imagetable Graphics.imagetable 
----@param reverse? boolean 'Set `true` to play the imagetable's frames in reverse order. Default: false'
+---@param reverse? boolean 'Set `true` to play the imagetable\'s frames in reverse order. Default: false'
 ---@param flipX? boolean ' Default: false'
 ---@param flipY? boolean ' Default: false'
 ---@param rotate? boolean 'Set as `true` to rotate the image 180-degrees Default: false'

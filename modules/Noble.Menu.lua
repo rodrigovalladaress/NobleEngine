@@ -7,17 +7,7 @@ Noble.Menu = {}
 --- @section setup
 
 --- Create a new menu object.
----@param __activate? boolean '@{activate|Activate} this menu upon creation. Default: true'
----@param __alignment? any 'The text alignment of menu items. Default: Noble.Text.ALIGN_LEFT'
----@param __localized? boolean 'If true, menu item names are localization keys rather than display names. Default: false'
----@param __color? any 'The color of menu item text. The selected highlight will be the inverse color. Default: Graphics.kColorBlack'
----@param __padding? integer 'Cell padding for menu items. Default: 2'
----@param __horizontalPadding? integer 'Use this to override horizontal padding, useful for certain fonts. If nil, uses __padding.'
----@param __margin? integer 'Spacing between menu items. Default: 2'
----@param __font? any 'If nil, uses current set font. Default: Noble.Text.getCurrentFont()'
----@param __selectedCornerRadius? integer 'Sets rounded corners for a selected menu item. Default: __font:getHeight()/4'
----@param __selectedOutlineThickness? integer 'Sets the outline thickness for selected items. Default: 1'
----@return any '`menu`, a new menu item.'
+---
 --- Usage:
 ---```
 ---	local menu = Noble.Menu.new(
@@ -32,11 +22,22 @@ Noble.Menu = {}
 ---	menu:addItem("Play Game", function() TitleScreen:playGame() end)
 ---	menu:addItem("Options", function() Noble.transition(OptionsScreen) end)
 ---	menu:addItem("Credits", function() Noble.transition(CreditsScreen) end)
-
 ---```
+---@param __activate? boolean 'Activate this menu upon creation. Default: true'
+---@param __alignment? any 'The text alignment of menu items. Default: Noble.Text.ALIGN_LEFT'
+---@param __localized? boolean 'If true, menu item names are localization keys rather than display names. Default: false'
+---@param __color? any 'The color of menu item text. The selected highlight will be the inverse color. Default: Graphics.kColorBlack'
+---@param __padding? integer 'Cell padding for menu items. Default: 2'
+---@param __horizontalPadding? integer 'Use this to override horizontal padding, useful for certain fonts. If nil, uses __padding.'
+---@param __margin? integer 'Spacing between menu items. Default: 2'
+---@param __font? any 'If nil, uses current set font. Default: Noble.Text.getCurrentFont()'
+---@param __selectedCornerRadius? integer 'Sets rounded corners for a selected menu item. Default: __font:getHeight()/4'
+---@param __selectedOutlineThickness? integer 'Sets the outline thickness for selected items. Default: 1'
+---@return any '`menu`, a new menu item.'
+---
 --- @see addItem
-function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding, __horizontalPadding, __margin, __font, __selectedCornerRadius, __selectedOutlineThickness)
-
+function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding, __horizontalPadding, __margin, __font,
+						__selectedCornerRadius, __selectedOutlineThickness)
 	--- Prep for creating the gridview object
 	local paddingLocal = __padding or 2
 	local fontLocal = __font or Noble.Text.getCurrentFont()
@@ -50,14 +51,14 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 
 	menu.alignment = __alignment or Noble.Text.ALIGN_LEFT
 
-	---@param _? boolean 'Indicates whether this menu's item names are treated as localization keys. Default: false'
+	---@param _? boolean 'Indicates whether this menu\'s item names are treated as localization keys. Default: false'
 	menu.localized = Utilities.handleOptionalBoolean(__localized, false)
 	menu.textHeight = textHeightLocal
 	menu.padding = paddingLocal
 	menu.horizontalPadding = __horizontalPadding or menu.padding
 	menu.margin = __margin or 2
 	menu.font = fontLocal
-	menu.selectedCornerRadius = __selectedCornerRadius or textHeightLocal/4
+	menu.selectedCornerRadius = __selectedCornerRadius or textHeightLocal / 4
 	menu.selectedOutlineThickness = __selectedOutlineThickness or 1
 
 	--- Local cleanup. We don't need these anymore.
@@ -140,14 +141,14 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	--- Properties
 	--- @section properties
 
-	---@param _ integer 
+	---@param _ integer
 	--- The current menu item's index.
 	--
 	--- This is meant as a <strong>read-only</strong> value. Do not modify it directly.
 	--- @see select
 	menu.currentItemNumber = 1
 
-	---@param _ string 
+	---@param _ string
 	--- The current menu item's name.
 	--
 	--- This is meant as a <strong>read-only</strong> value. Do not modify it directly.
@@ -155,7 +156,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	menu.currentItemName = menu.itemNames[1]
 
 
-	---@param _ integer 
+	---@param _ integer
 	--- The width of the widest menu item plus the menu's horizontal padding.
 	--
 	--- This is meant as a <strong>read-only</strong> value. Do not modify it directly.
@@ -169,14 +170,17 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	---@param __clickHandler? function 'The function that runs when this menu item is "clicked."'
 	---@param __position? integer 'Insert the item at a specific position. If not set, adds to the end of the list.'
 	---@param __displayName? string 'You can create an optional, separate display name for this item. You can add or change this at runtime via @{setItemDisplayName|setItemDisplayName}.'
-	---@param __displayNameIsALocalizationKey? boolean 'If true, will treat the `__displayName` as a localization key. This is separate from this menu's @{localized|localized} value. Default: false'
+	---@param __displayNameIsALocalizationKey? boolean 'If true, will treat the `__displayName` as a localization key. This is separate from this menu\'s @{localized|localized} value. Default: false'
 	--- @see new
 	--- @see removeItem
 	--- @see setItemDisplayName
 	function menu:addItem(__nameOrKey, __clickHandler, __position, __displayName, __displayNameIsALocalizationKey)
-		local clickHandler = __clickHandler or function () print("Menu item \"" .. __nameOrKey .. "\" clicked!") end
+		local clickHandler = __clickHandler or function() print("Menu item \"" .. __nameOrKey .. "\" clicked!") end
 		if (__position ~= nil) then
-			if (__position <= 0 or __position > #self.itemNames) then error("BONK: Menu item out of range.", 3) return end
+			if (__position <= 0 or __position > #self.itemNames) then
+				error("BONK: Menu item out of range.", 3)
+				return
+			end
 			table.insert(self.itemNames, __position, __nameOrKey)
 			for key, value in pairs(self.itemPositions) do
 				if (value >= __position) then
@@ -217,12 +221,10 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		end
 
 		self:setNumberOfRows(#self.itemNames)
-
 	end
 
 	--- Internal method.
 	function menu:updateWidths(__nameOrKey, __string)
-
 		if (__string == nil) then
 			__string = __nameOrKey
 		end
@@ -235,11 +237,11 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		for _, value in pairs(self.itemWidths) do
 			if value > width then width = value end
 		end
-		self.width =  width + (self.horizontalPadding * 2) + (self.selectedOutlineThickness * 2)
+		self.width = width + (self.horizontalPadding * 2) + (self.selectedOutlineThickness * 2)
 	end
 
 	--- Removes a item from this menu.
-	---@param __menuItem? int|string 'The menu item to remove. You can enter either the item's name/key or it's position. If left blank, removes the last item. Default: #menu.itemNames'
+	---@param __menuItem? int|string 'The menu item to remove. You can enter either the item\'s name/key or it's position. If left blank, removes the last item. Default: #menu.itemNames'
 	--- @see addItem
 	function menu:removeItem(__menuItem)
 		local itemString = nil
@@ -250,13 +252,19 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		end
 
 		if (type(__menuItem) == "number") then
-			if (__menuItem <= 0 or __menuItem > #self.itemNames) then error("BONK: Menu item out of range.", 3) return end
+			if (__menuItem <= 0 or __menuItem > #self.itemNames) then
+				error("BONK: Menu item out of range.", 3)
+				return
+			end
 			itemString = self.itemNames[__menuItem]
 			itemPosition = __menuItem
 		elseif (type(__menuItem) == "string") then
 			itemString = __menuItem
 			itemPosition = self.itemPositions[__menuItem]
-			if (itemPosition == nil) then error("BONK: Menu item not found.", 3) return end
+			if (itemPosition == nil) then
+				error("BONK: Menu item not found.", 3)
+				return
+			end
 		end
 
 		for key, value in pairs(self.itemPositions) do
@@ -287,8 +295,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		for _, value in pairs(self.itemWidths) do
 			if value > width then width = value end
 		end
-		self.width =  width + (self.horizontalPadding * 2) + (self.selectedOutlineThickness * 2)
-
+		self.width = width + (self.horizontalPadding * 2) + (self.selectedOutlineThickness * 2)
 	end
 
 	--
@@ -314,6 +321,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		active = true
 		self:select(self.currentItemNumber)
 	end
+
 	--- Deactivate this menu.
 	--- This deselects all menu items, and disables this menu's @{selectPrevious|selectPrevious}, @{selectNext|selectNext}, and @{click|click} methods.
 	--- @usage
@@ -323,8 +331,9 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		self:setSelectedRow(0)
 		active = false
 	end
+
 	--- Check to see if this menu is currently active.
-	---@return boolean 
+	---@return boolean
 	function menu:isActive()
 		return active
 	end
@@ -346,6 +355,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 			self.currentItemName = self.itemNames[row]
 		end
 	end
+
 	--- Selects the next previous item in this menu. <strong>This menu must be active.</strong>
 	---@param __force? boolean 'Force this method to run, even if this menu is not active. Default: false'
 	---@param __wrapSelection? boolean 'Selects the first menu item if the final menu item is currently selected. Default: true'
@@ -365,7 +375,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	end
 
 	--- Selects a specific item in this menu, either by it's index, or it's name. <strong>This menu must be active.</strong>
-	---@param __menuItem int|string 'The menu item to select. You can enter the item's number or it's name/key.'
+	---@param __menuItem int|string 'The menu item to select. You can enter the item\'s number or it's name/key.'
 	---@param __force? boolean 'Force this method to run, even if this menu is not active. Default: false'
 	--- @see activate
 	--- @usage
@@ -378,7 +388,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	---		menu:select("Play Game", true)
 	---		menu:deactivate()
 	---	end
-    function menu:select(__menuItem, __force)
+	function menu:select(__menuItem, __force)
 		if (self:isActive() or __force) then
 			if (type(__menuItem) == 'number') then
 				if (__menuItem < 1) then
@@ -415,7 +425,7 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	--
 	--- If this menu's `localized` value is true, a returned `__nameOrKey` will always be localized, but a returned display name is only localized if the `__displayNameIsALocalizationKey` argument was set to `true` when the display name was added.
 	---@param __itemName string 'The menu item you want the display name of.'
-	---@return string 
+	---@return string
 	--- @see addItem
 	--- @see setItemDisplayName
 	function menu:getItemDisplayName(__itemName)
@@ -446,7 +456,8 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	---	end
 	function menu:setItemDisplayName(__itemName, __displayName, __displayNameIsALocalizationKey)
 		self.displayNames[__itemName] = __displayName
-		self.displayNamesAreLocalized[__itemName] = Utilities.handleOptionalBoolean(__displayNameIsALocalizationKey, false)
+		self.displayNamesAreLocalized[__itemName] = Utilities.handleOptionalBoolean(__displayNameIsALocalizationKey,
+			false)
 
 		local displayName
 		if (__displayNameIsALocalizationKey == true) then
@@ -479,11 +490,13 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 	function menu:draw(__x, __y)
 		local xAdjustment = 0
 		if (self.alignment == Noble.Text.ALIGN_CENTER) then
-			xAdjustment = self.width/2
+			xAdjustment = self.width / 2
 		elseif (self.alignment == Noble.Text.ALIGN_RIGHT) then
 			xAdjustment = self.width
 		end
-		self:drawInRect(__x - xAdjustment, __y, self.width, ((self.textHeight + self.padding + self.margin) * #self.itemNames) + (self.selectedOutlineThickness * 2) - self.margin)
+		self:drawInRect(__x - xAdjustment, __y, self.width,
+			((self.textHeight + self.padding + self.margin) * #self.itemNames) + (self.selectedOutlineThickness * 2) -
+			self.margin)
 	end
 
 	--- This method is called for every <strong>non-selected</strong> item when @{draw|draw} is called. You shouldn't call this directly, but you may re-implement it if you wish.
@@ -504,13 +517,14 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		Graphics.setImageDrawMode(self.fillMode)
 		local xAdjustment = self.selectedOutlineThickness
 		if (self.alignment == Noble.Text.ALIGN_CENTER) then
-			xAdjustment = self.width/2 - self.horizontalPadding/2
+			xAdjustment = self.width / 2 - self.horizontalPadding / 2
 		elseif (self.alignment == Noble.Text.ALIGN_RIGHT) then
 			xAdjustment = self.width - self.horizontalPadding - self.selectedOutlineThickness
 		end
 		Noble.Text.draw(
 			self:getItemDisplayName(self.itemNames[__itemIndex]),
-			__x + self.horizontalPadding/2 + xAdjustment, __y + self.padding/2 + self.selectedOutlineThickness + (self.margin * (__itemIndex -1)),
+			__x + self.horizontalPadding / 2 + xAdjustment,
+			__y + self.padding / 2 + self.selectedOutlineThickness + (self.margin * (__itemIndex - 1)),
 			self.alignment, false, self.font
 		)
 	end
@@ -541,21 +555,30 @@ function Noble.Menu.new(__activate, __alignment, __localized, __color, __padding
 		local xAdjustmentText = self.selectedOutlineThickness
 		local xAdjustmentRect = self.selectedOutlineThickness
 		if (self.alignment == Noble.Text.ALIGN_CENTER) then
-			xAdjustmentText = self.width/2 - self.horizontalPadding/2
-			xAdjustmentRect = self.width/2 - self.itemWidths[self.itemNames[__itemIndex]]/2 - self.horizontalPadding/2
+			xAdjustmentText = self.width / 2 - self.horizontalPadding / 2
+			xAdjustmentRect = self.width / 2 - self.itemWidths[self.itemNames[__itemIndex]] / 2 -
+				self.horizontalPadding / 2
 		elseif (self.alignment == Noble.Text.ALIGN_RIGHT) then
 			xAdjustmentText = self.width - self.horizontalPadding - self.selectedOutlineThickness
-			xAdjustmentRect = self.width - self.itemWidths[self.itemNames[__itemIndex]] - self.horizontalPadding - self.selectedOutlineThickness
+			xAdjustmentRect = self.width - self.itemWidths[self.itemNames[__itemIndex]] - self.horizontalPadding -
+				self.selectedOutlineThickness
 		end
 		Graphics.setColor(self.color)
-		Graphics.fillRoundRect(__x + xAdjustmentRect, __y + self.selectedOutlineThickness + (self.margin * (__itemIndex -1)), self.itemWidths[self.itemNames[__itemIndex]]+self.horizontalPadding, self.textHeight+self.padding, self.selectedCornerRadius)
+		Graphics.fillRoundRect(__x + xAdjustmentRect,
+			__y + self.selectedOutlineThickness + (self.margin * (__itemIndex - 1)),
+			self.itemWidths[self.itemNames[__itemIndex]] + self.horizontalPadding, self.textHeight + self.padding,
+			self.selectedCornerRadius)
 		Graphics.setColor(self.otherColor)
 		Graphics.setLineWidth(self.selectedOutlineThickness)
-		Graphics.drawRoundRect(__x + xAdjustmentRect, __y + self.selectedOutlineThickness + (self.margin * (__itemIndex -1)), self.itemWidths[self.itemNames[__itemIndex]]+self.horizontalPadding, self.textHeight+self.padding, self.selectedCornerRadius)
+		Graphics.drawRoundRect(__x + xAdjustmentRect,
+			__y + self.selectedOutlineThickness + (self.margin * (__itemIndex - 1)),
+			self.itemWidths[self.itemNames[__itemIndex]] + self.horizontalPadding, self.textHeight + self.padding,
+			self.selectedCornerRadius)
 		Graphics.setImageDrawMode(self.otherFillMode)
 		Noble.Text.draw(
 			self:getItemDisplayName(self.itemNames[__itemIndex]),
-			__x + self.horizontalPadding/2 + xAdjustmentText, __y + self.padding/2 + self.selectedOutlineThickness + (self.margin * (__itemIndex -1)),
+			__x + self.horizontalPadding / 2 + xAdjustmentText,
+			__y + self.padding / 2 + self.selectedOutlineThickness + (self.margin * (__itemIndex - 1)),
 			self.alignment, false, self.font
 		)
 	end

@@ -11,24 +11,18 @@ NobleSprite = {}
 class("NobleSprite").extends(Graphics.sprite)
 
 --- Do not call an "init" method directly. Use `NobleSprite()` (see usage examples).
----@param __view? string 'This can be: the path to an image or spritesheet image file, an image object (`Graphics.image`) or an animation object (`Noble.Animation`)'
----@param __viewIsSpritesheet? boolean 'Set this to `true` to indicate that `__view` is a spritesheet. Will only be considered if `__view` is a string path to an image. Default: false'
----@param __singleState? boolean 'If this sprite has just one animation, set this to true. It saves you from having to use Noble.Animation.addState() Default: false'
----@param __singleStateLoop? boolean 'If using a single state animation, should it loop? Default: true'
---
+---
 --- Usage:
 ---```
 ---	-- Provide a spritesheet image file to create a new `Noble.Animation` for a NobleSprite's view.
 ---	myNobleSprite = NobleSprite("path/to/spritesheet", true)
 --
-
 ---```
 --- Usage:
 ---```
 ---	-- Provide an image file to create a new `Graphics.image` for a NobleSprite's view.
 ---	myNobleSprite = NobleSprite("path/to/image")
 --
-
 ---```
 --- Usage:
 ---```
@@ -37,7 +31,6 @@ class("NobleSprite").extends(Graphics.sprite)
 ---  myAnimation:addState("default", 1, animation.imageTable:getLength(), nil, true)
 ---	myNobleSprite = NobleSprite(myAnimation)
 --
-
 ---```
 --- Usage:
 ---```
@@ -45,7 +38,6 @@ class("NobleSprite").extends(Graphics.sprite)
 ---  local myImage = Graphics.image.new("path/to/image")
 ---	myNobleSprite = NobleSprite(myImage)
 --
-
 ---```
 --- Usage:
 ---```
@@ -63,8 +55,11 @@ class("NobleSprite").extends(Graphics.sprite)
 ---	-- MyNobleScene.lua
 ---	myNobleSprite = MyCustomSprite(100, 100, "Fun!")
 --
-
 ---```
+---@param __view? string 'This can be: the path to an image or spritesheet image file, an image object (`Graphics.image`) or an animation object (`Noble.Animation`)'
+---@param __viewIsSpritesheet? boolean 'Set this to `true` to indicate that `__view` is a spritesheet. Will only be considered if `__view` is a string path to an image. Default: false'
+---@param __singleState? boolean 'If this sprite has just one animation, set this to true. It saves you from having to use Noble.Animation.addState() Default: false'
+---@param __singleStateLoop? boolean 'If using a single state animation, should it loop? Default: true'
 --- @see Noble.Animation:addState
 --- @see Noble.Animation.new
 --
@@ -73,7 +68,6 @@ function NobleSprite:init(__view, __viewIsSpritesheet, __singleState, __singleSt
 	self.isNobleSprite = true --- This is important so other methods don't confuse this for a playdate.graphics.sprite. DO NOT modify this value at runtime.
 
 	if (__view ~= nil) then
-
 		--- __view is the path to an image or spritesheet file.
 		if (type(__view) == "string") then
 			self.animated = __viewIsSpritesheet --- NO NOT modify self.animated at runtime.
@@ -91,25 +85,22 @@ function NobleSprite:init(__view, __viewIsSpritesheet, __singleState, __singleSt
 				if (__singleState == true) then
 					self.animation:addState("default", 1, self.animation.imageTable:getLength(), nil, singleStateLoop)
 				end
-
 			else
 				--- Create a new Graphics.image object.
 				self:setImage(Graphics.image.new(__view))
 			end
 
-		--- __view is an existing Graphics.image object.
+			--- __view is an existing Graphics.image object.
 		elseif (type(__view) == "userdata") then
 			self.animated = false
 			self:setImage(__view)
 
-		--- __view is an existing Noble.Animation object.
+			--- __view is an existing Noble.Animation object.
 		elseif (type(__view) == "table") then
 			self.animated = true
 			self.animation = __view
 		end
-
 	end
-
 end
 
 function NobleSprite:draw()
@@ -159,7 +150,7 @@ end
 function NobleSprite:remove()
 	if (self.animation ~= nil) then
 		self:stop()
-		self:setUpdatesEnabled(true)	--- reset!
+		self:setUpdatesEnabled(true) --- reset!
 	end
 	Noble.currentScene():removeSprite(self)
 end

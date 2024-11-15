@@ -1,14 +1,14 @@
 --- Operations for game settings / stats.
 --- @module Noble.Settings
 --
-Noble.Settings = {}				--- This is the "class" that holds methods.
-local settings = nil			--- This is the actual settings object. We keep it local to avoid direct tampering.
-local settingsDefault = nil		--- We keep track of default values so they can be reset.
+Noble.Settings = {}         --- This is the "class" that holds methods.
+local settings = nil        --- This is the actual settings object. We keep it local to avoid direct tampering.
+local settingsDefault = nil --- We keep track of default values so they can be reset.
 
 local function keyChange(__dataDefault, __data)
 	local defaultKeys = {}
 	local keys = {}
-	for key, value in pairs(__dataDefault) do	table.insert(defaultKeys, key) end
+	for key, value in pairs(__dataDefault) do table.insert(defaultKeys, key) end
 	for key, value in pairs(__data) do table.insert(keys, key) end
 	for i = 1, #keys, 1 do
 		if (defaultKeys[i] ~= keys[i]) then return true end
@@ -32,11 +32,10 @@ local settingsHaveBeenSetup = false
 --- Sets up the settings for your game. You can only run this once, and you must run it before using other `Noble.Settings` functions. It is recommended to place it in your main.lua, before `Noble.new()`.
 --
 --- <strong>NOTE:</strong> You will *not* be able to add new keys via the `Noble.Settings.set` method. This means you need to specify the keys and default values of all of the settings in your game at setup.
+---
 --- If you need to add keys that are not known during setup, it is probably not a setting and you should consider using `Noble.GameData` instead.
----@param __keyValuePairs table 'table. Your game's settings, and thier default values, as key/value pairs. <strong>NOTE:</strong> Do not use "nil" as a value.'
----@param __saveToDisk? boolean 'Saves your default values immediatly to disk. Default: true'
----@param __modifyExistingOnKeyChange? boolean 'Updates the existing settings object on disk if you make changes to your settings keys (not values) during development or when updating your game. Default: true'
---- Usage:
+---
+---  Usage:
 ---```
 ---	Noble.Settings.setup({
 ---		difficulty = "normal",
@@ -45,8 +44,10 @@ local settingsHaveBeenSetup = false
 ---		players = 2,
 ---		highScore = 0	-- You can store persistant stats here, too!
 ---	})
-
 ---```
+---@param __keyValuePairs table 'table. Your game\'s settings, and thier default values, as key/value pairs. <strong>NOTE:</strong> Do not use "nil" as a value.'
+---@param __saveToDisk? boolean 'Saves your default values immediatly to disk. Default: true'
+---@param __modifyExistingOnKeyChange? boolean 'Updates the existing settings object on disk if you make changes to your settings keys (not values) during development or when updating your game. Default: true'
 function Noble.Settings.setup(__keyValuePairs, __saveToDisk, __modifyExistingOnKeyChange)
 	if (settingsHaveBeenSetup) then
 		error("BONK: You can only run Noble.Settings.setup() once.")
@@ -57,7 +58,8 @@ function Noble.Settings.setup(__keyValuePairs, __saveToDisk, __modifyExistingOnK
 
 	--- Prevent using the setup() method if there are no settings to register
 	if (__keyValuePairs == nil or table.getSize(__keyValuePairs) == 0) then
-		error("BONK: Do not use Noble.Settings.setup if you do not have any settings to register. New settings cannot be added via Noble.Settings.set and must be all declared upfront in the Noble.Settings.setup method.")
+		error(
+		"BONK: Do not use Noble.Settings.setup if you do not have any settings to register. New settings cannot be added via Noble.Settings.set and must be all declared upfront in the Noble.Settings.setup method.")
 		return
 	end
 
@@ -81,7 +83,6 @@ function Noble.Settings.setup(__keyValuePairs, __saveToDisk, __modifyExistingOnK
 			--- naturally discarding keys that don't exist anymore.
 			if (existingSettings[key] ~= nil) then settings[key] = existingSettings[key] end
 		end
-
 	end
 
 	if (saveToDisk) then
@@ -103,7 +104,7 @@ end
 --
 --- <strong>NOTE:</strong> If __settingName is not a key in the __keyValuePairs dictionary given to the `setup` method it will not be added to the Settings.
 ---@param __settingName string 'The name of the setting.'
----@param __value any 'The setting's new value'
+---@param __value any 'The setting\'s new value'
 ---@param __saveToDisk? boolean 'Saves to disk immediately. Set to false if you prefer to manually save (via a confirm button, etc). Default: true'
 --- @see setup
 --- @see get

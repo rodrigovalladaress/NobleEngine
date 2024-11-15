@@ -72,12 +72,7 @@ local defaultConfiguration = {
 local configuration = Utilities.copy(defaultConfiguration)
 
 --- Engine initialization. Run this once in your main.lua file to begin your game.
----@param StartingScene NobleScene 'This is the scene your game begins with, such as a title screen, loading screen, splash screen, etc. **NOTE: Pass the scene's class name, not an instance of the scene.**'
----@param __launcherTransitionDuration? number 'If you want to transition from the final frame of your launch image sequence, enter a duration in seconds here. Default: 1.5'
----@param __launcherTransition? Noble.Transition 'If a transition duration is set, use this transition type. Default: Noble.Transition.DipToBlack'
----@param __launcherTransitionProperties? table 'Provide a table of properties to apply to the launcher transition. See the documentation for the transition you're using for a list of available properties. Default: {}'
----@param __configuration? table 'Provide a table of Noble Engine configuration values. This will run `Noble.setConfig` for you at launch. Default: {}'
----@param __sceneProperties? table 'A table consisting of user-defined properties which are passed into and handled by the new scene's init() method. Default: {}'
+---
 --- Usage:
 ---```
 --- Noble.new(
@@ -94,8 +89,13 @@ local configuration = Utilities.copy(defaultConfiguration)
 --- 		enableDebugBonkChecking = true,
 --- 	}
 --- )
-
 ---```
+---@param StartingScene NobleScene 'This is the scene your game begins with, such as a title screen, loading screen, splash screen, etc. **NOTE: Pass the scene\'s class name, not an instance of the scene.**'
+---@param __launcherTransitionDuration? number 'If you want to transition from the final frame of your launch image sequence, enter a duration in seconds here. Default: 1.5'
+---@param __launcherTransition? Noble.Transition 'If a transition duration is set, use this transition type. Default: Noble.Transition.DipToBlack'
+---@param __launcherTransitionProperties? table 'Provide a table of properties to apply to the launcher transition. See the documentation for the transition you\'re using for a list of available properties. Default: {}'
+---@param __configuration? table 'Provide a table of Noble Engine configuration values. This will run `Noble.setConfig` for you at launch. Default: {}'
+---@param __sceneProperties? table 'A table consisting of user-defined properties which are passed into and handled by the new scene\'s init() method. Default: {}'
 --- @see NobleScene
 --- @see Noble.transition
 --- @see setConfig
@@ -254,11 +254,11 @@ local queuedScene = nil
 --- 	}
 --- )
 ---```
----@param NewScene NobleScene 'The scene to transition to. Pass the scene's class, not an instance of the scene. You always transition from `Noble.currentScene`'
+---@param NewScene NobleScene 'The scene to transition to. Pass the scene\'s class, not an instance of the scene. You always transition from `Noble.currentScene`'
 ---@param __duration? number 'The length of the transition, in seconds. Default: 1.5'
 ---@param __transition? Noble.Transition 'If a transition duration is set, use this transition type. If not set, it will use the value of `configuration.defaultTransition`. Default: Noble.TransitionType.DIP_TO_BLACK'
----@param __transitionProperties? table 'A table consisting of properties for this transition. Properties not set here will use values that transition's `defaultProperties` table. Default: {}'
----@param __sceneProperties? table 'A table consisting of user-defined properties which are passed into and handled by the new scene's init() method. Default: {}'
+---@param __transitionProperties? table 'A table consisting of properties for this transition. Properties not set here will use values that transition\'s `defaultProperties` table. Default: {}'
+---@param __sceneProperties? table 'A table consisting of user-defined properties which are passed into and handled by the new scene\'s init() method. Default: {}'
 --- @see Noble.isTransitioning
 --- @see NobleScene
 --- @see Noble.Transition

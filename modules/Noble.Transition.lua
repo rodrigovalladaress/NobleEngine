@@ -27,55 +27,55 @@ Noble.Transition.Type.MIX = "Mix"
 Noble.Transition.defaultProperties = {}
 
 function Noble.Transition:init(__duration, __arguments)
-
 	self.duration = __duration or Noble.getConfig().defaultTransitionDuration
 
-	self.durationEnter = __arguments.durationEnter or self.duration/2
-	self.durationExit = __arguments.durationExit or self.duration/2
+	self.durationEnter = __arguments.durationEnter or self.duration / 2
+	self.durationExit = __arguments.durationExit or self.duration / 2
 
 	if (__arguments.durationEnter and not __arguments.durationExit) then
-		warn("Soft-BONK: You've specified 'durationEnter' but not 'durationExit' for this transition. Thus, 'durationExit' will be half the value of 'duration'. Did you intend to do that?")
+		warn(
+		"Soft-BONK: You've specified 'durationEnter' but not 'durationExit' for this transition. Thus, 'durationExit' will be half the value of 'duration'. Did you intend to do that?")
 	elseif (__arguments.durationExit and not __arguments.durationEnter) then
-		warn("Soft-BONK: You've specified 'durationExit' but not 'durationEnter' for this transition. Thus, 'durationEnter' will be half the value of 'duration'. Did you intend to do that?")
+		warn(
+		"Soft-BONK: You've specified 'durationExit' but not 'durationEnter' for this transition. Thus, 'durationEnter' will be half the value of 'duration'. Did you intend to do that?")
 	end
 
-	self.sequence = nil
+	self.sequence                            = nil
 
 	self._captureScreenshotsDuringTransition = self._captureScreenshotsDuringTransition or false
 
-	self.midpointReached  = false
-	self.holdTimeElapsed = false
+	self.midpointReached                     = false
+	self.holdTimeElapsed                     = false
 
-	self.drawMode = self.drawMode or __arguments.drawMode or Graphics.kDrawModeCopy
+	self.drawMode                            = self.drawMode or __arguments.drawMode or Graphics.kDrawModeCopy
 
-	self.holdTime = self.holdTime or __arguments.holdTime or self.defaultProperties.holdTime or 0
+	self.holdTime                            = self.holdTime or __arguments.holdTime or self.defaultProperties.holdTime or
+	0
 
 	--- If the transition duration is so short that it breaks the sequence, we pad
 	--- out the time so that it takes at least one frame on either side. This is a
 	--- failsafe mostly in place for runtime-calculated transition durations. No one
 	--- would ever set a transition duration that short on purpose... right?
-	local frameDuration = 1/playdate.getFPS()
-	if ((self.durationEnter - self.holdTime/2) < frameDuration) then
-		self.durationEnter = frameDuration + self.holdTime/2 + 0.001
+	local frameDuration                      = 1 / playdate.getFPS()
+	if ((self.durationEnter - self.holdTime / 2) < frameDuration) then
+		self.durationEnter = frameDuration + self.holdTime / 2 + 0.001
 	end
-	if ((self.durationExit - self.holdTime/2) < frameDuration) then
-		self.durationEnter = frameDuration + self.holdTime/2 + 0.001
+	if ((self.durationExit - self.holdTime / 2) < frameDuration) then
+		self.durationEnter = frameDuration + self.holdTime / 2 + 0.001
 	end
 
 	if (self._type == Noble.Transition.Type.MIX) then
-
 		self._sequenceStartValue = self._sequenceStartValue or 0
 		self._sequenceCompleteValue = self._sequenceCompleteValue or 1
 
 		self.ease = self.ease or __arguments.ease or self.defaultProperties.ease or Ease.linear
 		if ((__arguments.easeEnter or __arguments.easeExit) ~= nil) then
-			warn("BONK: You've specified an 'easeEnter' and/or 'easeExit' argument for a transition of type 'Noble.Transition.Type.MIX'. This will have no effect. Use 'ease' instead, or specify a transition of type 'Noble.Transition.Type.COVER'.")
+			warn(
+			"BONK: You've specified an 'easeEnter' and/or 'easeExit' argument for a transition of type 'Noble.Transition.Type.MIX'. This will have no effect. Use 'ease' instead, or specify a transition of type 'Noble.Transition.Type.COVER'.")
 		end
 
 		self.oldSceneScreenshot = Utilities.screenshot()
-
 	elseif (self._type == Noble.Transition.Type.COVER) then
-
 		self._sequenceStartValue = self._sequenceStartValue or 0
 		self._sequenceMidpointValue = self._sequenceMidpointValue or 1
 		self._sequenceResumeValue = self._sequenceResumeValue or 1
@@ -86,21 +86,24 @@ function Noble.Transition:init(__duration, __arguments)
 			self.easeEnter = self.easeEnter or self.defaultProperties.easeEnter or Ease.enter(ease) or ease
 			self.easeExit = self.easeExit or self.defaultProperties.easeExit or Ease.exit(ease) or ease
 			if (Ease.enter(ease) == nil or Ease.exit(ease) == nil) then
-				warn("Soft-BONK: You've specified an 'ease' value for a transition of type 'Noble.Transition.Type.COVER' that isn't in the form of 'Ease.inOutXxxx' or an 'Ease.outInXxxx'. As a result, this value will be used for both 'easeEnter' and 'easeExit'. Did you mean to do that?")
+				warn(
+				"Soft-BONK: You've specified an 'ease' value for a transition of type 'Noble.Transition.Type.COVER' that isn't in the form of 'Ease.inOutXxxx' or an 'Ease.outInXxxx'. As a result, this value will be used for both 'easeEnter' and 'easeExit'. Did you mean to do that?")
 			end
 		else
-			self.easeEnter = self.easeEnter or __arguments.easeEnter or self.defaultProperties.easeEnter or self.easeEnter or Ease.linear
-			self.easeExit = self.easeExit or __arguments.easeExit or self.defaultProperties.easeExit or self.easeExit or Ease.linear
+			self.easeEnter = self.easeEnter or __arguments.easeEnter or self.defaultProperties.easeEnter or
+			self.easeEnter or Ease.linear
+			self.easeExit = self.easeExit or __arguments.easeExit or self.defaultProperties.easeExit or self.easeExit or
+			Ease.linear
 		end
-
 	end
 
 	self:setProperties(__arguments)
-
 end
 
 --- Use this to modify multiple default properties of a transition. Having default properties avoids having to set them every time a transition is called.
+---
 --- Properties added here are merged with the existing default properties table. Overwrites only happen when a new value is set.
+---
 --- Usage:
 ---```
 --- Noble.Transition.setDefaultProperties(Noble.Transition.CrossDissolve, {
@@ -112,7 +115,6 @@ end
 --- 	y = 95,
 --- 	invert = true
 --- })
-
 ---```
 --- @see defaultProperties
 function Noble.Transition.setDefaultProperties(__transition, __properties)
@@ -120,16 +122,15 @@ function Noble.Transition.setDefaultProperties(__transition, __properties)
 end
 
 function Noble.Transition:execute()
-
 	local onStart = function()
 		Noble.transitionStartHandler()
-		self:onStart()					--- If this transition has any custom code to run here, run it.
+		self:onStart() --- If this transition has any custom code to run here, run it.
 	end
 
 	local onMidpoint = function()
 		Noble.transitionMidpointHandler()
 		self.midpointReached = true
-		self:onMidpoint()				--- If this transition has any custom code to run here, run it.
+		self:onMidpoint() --- If this transition has any custom code to run here, run it.
 	end
 
 	local onHoldTimeElapsed = function()
@@ -138,7 +139,7 @@ function Noble.Transition:execute()
 	end
 
 	local onComplete = function()
-		self:onComplete()				--- If this transition has any custom code to run here, run it.
+		self:onComplete() --- If this transition has any custom code to run here, run it.
 		Noble.transitionCompleteHandler()
 	end
 
@@ -152,11 +153,11 @@ function Noble.Transition:execute()
 		onComplete()
 	elseif (type == Noble.Transition.Type.COVER) then
 		onStart()
-		local durationEnterCalculated = self.durationEnter-(holdTime/2)
+		local durationEnterCalculated = self.durationEnter - (holdTime / 2)
 		if (durationEnterCalculated <= 0) then
 			durationEnterCalculated = 0
 		end
-		local durationExitCalculated = self.durationExit-(holdTime/2)
+		local durationExitCalculated = self.durationExit - (holdTime / 2)
 		if (durationExitCalculated <= 0) then
 			durationExitCalculated = 0
 		end
@@ -180,7 +181,6 @@ function Noble.Transition:execute()
 			:callback(onComplete)
 			:start()
 	end
-
 end
 
 --- *Do not call this directly.* Implement this in a custom transition in order to set properties from user arguments given in `Noble.transition()`. See existing transitions for implementation examples.
@@ -201,7 +201,6 @@ function Noble.Transition:onComplete() end
 
 --- *Do not call this directly.* Implement this in a custom transition to draw the transition. This runs once per frame while the transition is running. See existing transitions for implementation examples.
 function Noble.Transition:draw() end
-
 
 --- Noble Engine built-in transitions.
 import 'libraries/noble/modules/Noble.Transition/Cut.lua'

@@ -7,13 +7,12 @@ Noble.Animation = {}
 --- Setup
 --- @section setup
 
+
 --- Create a new animation "state machine". This function is called automatically when creating a new `NobleSprite`.
----@param __view string 'This can be: the path to a spritesheet image file or an image table object (`Graphics.imagetable`). See Playdate SDK docs for imagetable file naming conventions.'
----@return any '`animation`, a new animation object.'
+---
 --- Usage:
 ---```
 ---	local myHero = MyHero("path/to/spritesheet")
-
 ---```
 --- Usage:
 ---```
@@ -33,12 +32,10 @@ Noble.Animation = {}
 ---		self.animation:addState("walk", 56, 65)
 ---		-- ...
 ---	end
-
 ---```
 --- Usage:
 ---```
 ---	local myAnimation = Noble.Animation.new("path/to/spritesheet")
-
 ---```
 --- Usage:
 ---```
@@ -57,11 +54,11 @@ Noble.Animation = {}
 ---		self.animation:addState("walk", 56, 65)
 ---		-- ...
 ---	end
-
 ---```
+---@param __view string 'This can be: the path to a spritesheet image file or an image table object (`Graphics.imagetable`). See Playdate SDK docs for imagetable file naming conventions.'
+---@return any '`animation`, a new animation object.'
 ---	@see NobleSprite:init
 function Noble.Animation.new(__view)
-
 	local animation = {}
 
 	--- Properties
@@ -129,11 +126,10 @@ function Noble.Animation.new(__view)
 	---	animation.["jump"].next			-- "float"
 	---	animation.idle.next				-- nil
 	function animation:addState(__name, __startFrame, __endFrame, __next, __loop, __onComplete, __frameDuration)
-
 		local loop = true
 		local frameDuration = 1
 		if (__loop ~= nil) then loop = __loop end
-		if(__frameDuration ~= nil) then frameDuration = __frameDuration end
+		if (__frameDuration ~= nil) then frameDuration = __frameDuration end
 		self[__name] = {
 			name = __name,
 			startFrame = __startFrame,
@@ -152,7 +148,6 @@ function Noble.Animation.new(__view)
 			self.currentName = __name
 			self.frameDuration = frameDuration
 		end
-
 	end
 
 	--- Methods
@@ -160,7 +155,7 @@ function Noble.Animation.new(__view)
 
 	--- Sets the current animation state. This can be run in a object's `update` method because it only changes the animation state if the new state is different from the current one.
 	---@param __animationState string|Noble.Animation 'The name of the animation to set. You can pass the name of the state, or the object itself.'
-	---@param __continuous? boolean 'Set to true if your new state's frames line up with the previous one's, i.e.: two walk cycles but one is wearing a cute hat! Default: false'
+	---@param __continuous? boolean 'Set to true if your new state\'s frames line up with the previous one's, i.e.: two walk cycles but one is wearing a cute hat! Default: false'
 	---@param __unlessThisState string|Noble.Animation 'If this state is the current state, do not set the new one.'
 	--- @usage animation:setState("walk")
 	--- @usage animation:setState(animation.walk)
@@ -192,7 +187,6 @@ function Noble.Animation.new(__view)
 	---		groundedLastFrame = grounded
 	---	end
 	function animation:setState(__animationState, __continuous, __unlessThisState)
-
 		if (__unlessThisState ~= nil) then
 			if (type(__unlessThisState) == "string") then
 				if (self.currentName == __unlessThisState) then return end
@@ -230,7 +224,7 @@ function Noble.Animation.new(__view)
 	--- When attached to a NobleSprite, this is called by `NobleSprite:draw()` when added to a scene. For non-NobleSprite sprites, put this method inside your sprite's `draw()` method, or inside @{NobleScene:update|NobleScene:update}.
 	---@param __x? number ' Default: 0'
 	---@param __y? number ' Default: 0'
-	---@param __advance? boolean 'Advances to the next frame after drawing this one. Noble.Animation is frame-based, not "delta time"-based, so its speed is dependent on your game's framerate. Default: true'
+	---@param __advance? boolean 'Advances to the next frame after drawing this one. Noble.Animation is frame-based, not "delta time"-based, so its speed is dependent on your game\'s framerate. Default: true'
 	--- @usage
 	---	function MySprite:draw()
 	---		animation:draw()
@@ -240,25 +234,26 @@ function Noble.Animation.new(__view)
 	---		animation:draw(100,100)
 	---	end
 	function animation:draw(__x, __y, __advance)
-
 		---print(self.currentName .. " > " .. self.currentFrame .. " >> " .. tostring(self.current.loop))
 
 		if (__advance == nil) then __advance = true end
 
-		if(self.currentFrame < self.current.startFrame or self.currentFrame > self.current.endFrame + 1) then
-			self.currentFrame = self.current.startFrame				--- Error correction.
-		elseif(self.currentFrame == self.current.endFrame + 1) then	--- End frame behavior.
+		if (self.currentFrame < self.current.startFrame or self.currentFrame > self.current.endFrame + 1) then
+			self.currentFrame = self.current.startFrame        --- Error correction.
+		elseif (self.currentFrame == self.current.endFrame + 1) then --- End frame behavior.
 			if (self.current.next ~= nil) then
-				self.currentFrame = self.current.next.startFrame	--- Set to first frame of next animation.
-				self.frameDurationCount = 1										--- Reset ticks.
+				self.currentFrame = self.current.next.startFrame --- Set to first frame of next animation.
+				self.frameDurationCount = 1                    --- Reset ticks.
 				self.previousFrameDurationCount = self.frameDuration
-				self:setState(self.current.next)					--- Set next animation state.
+				self:setState(self.current.next)               --- Set next animation state.
 			elseif (self.current.loop == true) then
-				self.currentFrame = self.current.startFrame 		--- Loop animation state. (TO-DO: account for continuous somehow?)
-				self.frameDurationCount = 1										--- Reset ticks.
+				self.currentFrame = self.current
+					.startFrame --- Loop animation state. (TO-DO: account for continuous somehow?)
+				self.frameDurationCount = 1 --- Reset ticks.
 				self.previousFrameDurationCount = self.frameDuration
-			elseif(__advance) then
-				self.currentFrame = self.currentFrame - 1			--- Undo advance frame because we want to draw the same frame again.
+			elseif (__advance) then
+				self.currentFrame = self.currentFrame -
+					1 --- Undo advance frame because we want to draw the same frame again.
 			end
 
 			if (self.current.onComplete ~= nil) then
@@ -272,7 +267,7 @@ function Noble.Animation.new(__view)
 
 		if (__advance == true) then
 			self.frameDurationCount += 1
-			if((self.frameDurationCount - self.previousFrameDurationCount) >= self.current.frameDuration) then
+			if ((self.frameDurationCount - self.previousFrameDurationCount) >= self.current.frameDuration) then
 				self.currentFrame = self.currentFrame + 1
 				self.previousFrameDurationCount += self.current.frameDuration
 			end
@@ -282,7 +277,7 @@ function Noble.Animation.new(__view)
 
 	--- Sometimes, you just want to draw a specific frame.
 	--- Use this for objects or sprites that you want to control outside of update loops, such as score counters, flipbook-style objects that respond to player input, etc.
-	---@param __frameNumber integer 'The frame to draw from the current state. This is not an imagetable index. Entering `1` will draw the selected state's `startFrame`.'
+	---@param __frameNumber integer 'The frame to draw from the current state. This is not an imagetable index. Entering `1` will draw the selected state\'s `startFrame`.'
 	---@param __stateName? string 'The specific state to pull the __frameNumber from. Default: self.currentName'
 	---@param __x? number ' Default: 0'
 	---@param __y? number ' Default: 0'
