@@ -1,6 +1,5 @@
 --- An abstract class from which transition types are extended.
---- @module Noble.Transition
-
+--- @class Noble.Transition
 Noble.Transition = {}
 class("Transition", nil, Noble).extends()
 
@@ -34,10 +33,10 @@ function Noble.Transition:init(__duration, __arguments)
 
 	if (__arguments.durationEnter and not __arguments.durationExit) then
 		warn(
-		"Soft-BONK: You've specified 'durationEnter' but not 'durationExit' for this transition. Thus, 'durationExit' will be half the value of 'duration'. Did you intend to do that?")
+			"Soft-BONK: You've specified 'durationEnter' but not 'durationExit' for this transition. Thus, 'durationExit' will be half the value of 'duration'. Did you intend to do that?")
 	elseif (__arguments.durationExit and not __arguments.durationEnter) then
 		warn(
-		"Soft-BONK: You've specified 'durationExit' but not 'durationEnter' for this transition. Thus, 'durationEnter' will be half the value of 'duration'. Did you intend to do that?")
+			"Soft-BONK: You've specified 'durationExit' but not 'durationEnter' for this transition. Thus, 'durationEnter' will be half the value of 'duration'. Did you intend to do that?")
 	end
 
 	self.sequence                            = nil
@@ -50,7 +49,7 @@ function Noble.Transition:init(__duration, __arguments)
 	self.drawMode                            = self.drawMode or __arguments.drawMode or Graphics.kDrawModeCopy
 
 	self.holdTime                            = self.holdTime or __arguments.holdTime or self.defaultProperties.holdTime or
-	0
+		0
 
 	--- If the transition duration is so short that it breaks the sequence, we pad
 	--- out the time so that it takes at least one frame on either side. This is a
@@ -71,7 +70,7 @@ function Noble.Transition:init(__duration, __arguments)
 		self.ease = self.ease or __arguments.ease or self.defaultProperties.ease or Ease.linear
 		if ((__arguments.easeEnter or __arguments.easeExit) ~= nil) then
 			warn(
-			"BONK: You've specified an 'easeEnter' and/or 'easeExit' argument for a transition of type 'Noble.Transition.Type.MIX'. This will have no effect. Use 'ease' instead, or specify a transition of type 'Noble.Transition.Type.COVER'.")
+				"BONK: You've specified an 'easeEnter' and/or 'easeExit' argument for a transition of type 'Noble.Transition.Type.MIX'. This will have no effect. Use 'ease' instead, or specify a transition of type 'Noble.Transition.Type.COVER'.")
 		end
 
 		self.oldSceneScreenshot = Utilities.screenshot()
@@ -87,13 +86,13 @@ function Noble.Transition:init(__duration, __arguments)
 			self.easeExit = self.easeExit or self.defaultProperties.easeExit or Ease.exit(ease) or ease
 			if (Ease.enter(ease) == nil or Ease.exit(ease) == nil) then
 				warn(
-				"Soft-BONK: You've specified an 'ease' value for a transition of type 'Noble.Transition.Type.COVER' that isn't in the form of 'Ease.inOutXxxx' or an 'Ease.outInXxxx'. As a result, this value will be used for both 'easeEnter' and 'easeExit'. Did you mean to do that?")
+					"Soft-BONK: You've specified an 'ease' value for a transition of type 'Noble.Transition.Type.COVER' that isn't in the form of 'Ease.inOutXxxx' or an 'Ease.outInXxxx'. As a result, this value will be used for both 'easeEnter' and 'easeExit'. Did you mean to do that?")
 			end
 		else
 			self.easeEnter = self.easeEnter or __arguments.easeEnter or self.defaultProperties.easeEnter or
-			self.easeEnter or Ease.linear
+				self.easeEnter or Ease.linear
 			self.easeExit = self.easeExit or __arguments.easeExit or self.defaultProperties.easeExit or self.easeExit or
-			Ease.linear
+				Ease.linear
 		end
 	end
 

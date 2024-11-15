@@ -1,7 +1,10 @@
 ---
 --- An abstract scene class.
+---
 --- Do not copy this file as a template for your scenes. Instead, your scenes will extend this class.
+---
 --- See <a href="../examples/SceneTemplate.lua.html">templates/SceneTemplate.lua</a> for a blank scene that you can copy and modify for your own scenes.
+---
 --- If you are using <a href="http://github.com/NobleRobot/NobleEngine-ProjectTemplate">NobleEngine-ProjectTemplate</a>,
 --- see `scenes/ExampleScene.lua` for an implementation example.
 ---
@@ -10,16 +13,12 @@
 ---	YourSceneName = {}
 ---	class("YourSceneName").extends(NobleScene)
 ---	local scene = YourSceneName
---
 ---```
---- @classmod NobleScene
---
-
+--- @class NobleScene
 NobleScene = {}
 class("NobleScene").extends(Object)
 
 --- Properties
---- @section properties
 
 --- The name of this scene. Optional.
 --- If you do not set this value, it will take on the scene's `className`.
@@ -56,12 +55,15 @@ NobleScene.backgroundColor = Graphics.kColorWhite
 ---	-- Reuse another scene's inputHandler.
 ---	YourSceneName.inputHandler = SomeOtherSceneName.inputHandler
 ---```
+--- @type Noble.InputHandler
 NobleScene.inputHandler = {}
 
 --- When you add a sprite to your scene, it is put in this table so the scene can keep track of it.
 --
 --- This is intended as `read-only`. You should not modify this table directly.
---- @see addSprite
+---
+--- @see NobleScene.addSprite
+--- @type (playdate.graphics.sprite | NobleSprite)[]
 NobleScene.sprites = {}
 
 --- Methods
@@ -72,9 +74,9 @@ NobleScene.sprites = {}
 --- If your sprite is a `NobleSprite`, using `NobleSprite:add()` will also call this method.
 --
 --- Sprites added with this method that are tracked by the scene. Any not manually removed before transitioning to another scene are automatically removed in @{finish|finish}.
----@param __sprite playdate.graphics.sprite 'The sprite to add to the scene.'
---- @see NobleSprite:add
---- @see removeSprite
+---@param __sprite playdate.graphics.sprite | NobleSprite 'The sprite to add to the scene.'
+--- @see NobleSprite.add
+--- @see NobleScene.removeSprite
 function NobleScene:addSprite(__sprite)
 	if (__sprite.isNobleSprite == true) then
 		__sprite:superAdd()
@@ -92,9 +94,9 @@ end
 --- If your sprite is a `NobleSprite`, using `NobleSprite:remove()` will also call this method.
 --
 --- Sprites not manually removed before transitioning to another scene are automatically removed in @{finish|finish}.
----@param __sprite playdate.graphics.sprite 'The sprite to add to the scene.'
---- @see NobleSprite:remove
---- @see addSprite
+---@param __sprite playdate.graphics.sprite | NobleSprite 'The sprite to add to the scene.'
+--- @see NobleSprite.remove
+--- @see NobleScene.addSprite
 function NobleScene:removeSprite(__sprite)
 	if (__sprite.isNobleSprite == true) then
 		__sprite:superRemove()
@@ -120,6 +122,7 @@ end
 ---	end
 --
 ---```
+---@param __sceneProperties table
 function NobleScene:init(__sceneProperties)
 	self.name = self.className
 	self.sprites = {}
@@ -138,7 +141,7 @@ end
 function NobleScene:enter() end
 
 --- Implement if you have code to run once the transition to this scene is complete. This method signifies the full activation of a scene. If this scene's `inputHandler` is defined, it is enabled now.
---- @see inputHandler
+--- @see Noble.InputHandler
 --- Usage:
 ---```
 ---	function YourSceneName:start()
@@ -175,8 +178,11 @@ function NobleScene:update() end
 ---		YourSceneName.super.drawBackground(self) -- optional, invokes default behavior.
 ---		--[Your code here]--
 ---	end
---
 ---```
+---@param __x integer
+---@param __y integer
+---@param __width integer
+---@param __height integer
 function NobleScene:drawBackground(__x, __y, __width, __height)
 	__x = __x or 0
 	__y = __y or 0

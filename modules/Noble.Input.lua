@@ -3,7 +3,6 @@
 --- <br><br>You may also create and manage inputManagers within and outside of scenes. When a NobleScene is loaded, its inputHandler will become active, thus, inputHandlers do not carry across scenes, and all input is suspended during scene transitions. An advanced use-case is to leave a scene's inputHandler as nil, and manage it separately.
 --- <br><br><strong>NOTE:</strong> While the Playdate SDK allows you to stack as many inputHandlers as you want, Noble Engine assumes only one <em>active</em> inputHandler at a time. You may still manually call `playdate.inputHandlers.push()` and `playdate.inputHandlers.pop()` yourself, but Noble Engine will not know about it and it may cause unexpected behavior.
 --- <br><br>In addition, you may directly query button status using the SDK's methods for that, but it is not advised to use that as the primary way to manage input for Noble Engine projects, because much of Noble.Input's functionality will not apply.
---- @module Noble.Input
 ---
 --- Usage:
 ---```
@@ -35,9 +34,11 @@
 ---	}
 ---```
 --- @see NobleScene.inputHandler
---
+--- @class Noble.Input
 Noble.Input = {}
 
+--- @alias Noble.InputHandler { AButtonDown: fun(),  AButtonHold: fun(),  AButtonHeld: fun(),  AButtonUp: fun(),  BButtonDown: fun(), BButtonHold: fun(), BButtonHeld: fun(), BButtonUp: fun(), downButtonDown: fun(), downButtonHold: fun(), downButtonUp: fun(), leftButtonDown: fun(), leftButtonHold: fun(), leftButtonUp: fun(), rightButtonDown: fun(), rightButtonHold: fun(), rightButtonUp: fun(), upButtonDown: fun(), upButtonHold: fun(), upButtonUp: fun(), cranked: fun(change, acceleratedChange),  crankDocked: fun(),  crankUndocked: fun(),  orientationChanged: fun() }
+--- @type Noble.InputHandler
 local currentHandler = {}
 
 --- Get the currently active input handler. Returns nil if none are active.

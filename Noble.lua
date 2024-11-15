@@ -1,6 +1,4 @@
 --- A li'l game engine for Playdate.
---- @module Noble
-
 --
 --- https://noblerobot.com/
 --
@@ -55,6 +53,7 @@ import 'libraries/noble/modules/NobleScene.lua'
 import 'libraries/noble/modules/NobleSprite.lua'
 
 local isTransitioning = false
+---@type NobleScene | nil
 local currentScene = nil
 local engineInitialized = false
 

@@ -4,9 +4,8 @@
 --
 --- `NobleSprite` is a child class of `playdate.graphics.sprite`, so see the Playdate SDK documentation for additional methods and properties.
 --
---- @classmod NobleSprite
---
-
+--- @class NobleSprite
+--- @field super playdate.graphics.sprite
 NobleSprite = {}
 class("NobleSprite").extends(Graphics.sprite)
 
@@ -146,7 +145,7 @@ end
 --- Use this to remove this NobleSprite from your scene. This replaces `playdate.graphics.sprite:remove()` to allow NobleSprites to be tracked by the current NobleScene.
 --
 --- To remove a `playdate.graphics.sprite` from a scene, use `NobleScene:removeSprite(__sprite)`.
---- @see NobleScene:removeSprite
+--- @see NobleScene.removeSprite
 function NobleSprite:remove()
 	if (self.animation ~= nil) then
 		self:stop()
