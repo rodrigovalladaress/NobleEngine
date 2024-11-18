@@ -122,7 +122,7 @@ end
 ---	end
 --
 ---```
----@param __sceneProperties table
+---@param __sceneProperties table?
 function NobleScene:init(__sceneProperties)
 	self.name = self.className
 	self.sprites = {}
